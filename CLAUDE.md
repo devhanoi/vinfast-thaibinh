@@ -5,6 +5,9 @@
 ## Mục đích dự án
 Landing page tiếng Việt, **SEO-first**, nhắm Top 3 Google cho từ khóa **"vinfast thái bình"**. Đối thủ hiện tại (xem `docs/SEO-BRIEF.md`) có 800–2000 từ, thiếu schema markup, thiếu E-E-A-T, ít nội dung địa phương → đây là cơ hội vượt mặt.
 
+## Đọc bắt buộc khi mới vào dự án
+**Trước tiên đọc [`docs/AGENT-HANDOFF.md`](./docs/AGENT-HANDOFF.md)** — bản ghi nhớ từ session trước: state hiện tại, lessons learned, pitfalls kỹ thuật đã gặp, roadmap kế tiếp. Tránh lặp lại sai lầm.
+
 ## Tech stack (chốt)
 - **Framework**: Next.js 16 (App Router), TypeScript, SSG + ISR.
 - **Styling**: Tailwind CSS v4 + shadcn/ui.
