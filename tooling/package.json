@@ -1,0 +1,17 @@
+{
+  "name": "vinfast-thaibinh-tooling",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "private": "true",
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}

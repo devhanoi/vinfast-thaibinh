@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm:*)",
+      "Bash(npx:*)",
+      "Bash(npm:*)",
+      "Bash(node:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git restore:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(playwright:*)",
+      "WebFetch(domain:vinfastauto.com)",
+      "WebFetch(domain:vinfast-thaibinh.com)",
+      "WebFetch(domain:vinfastthaibinh.com)",
+      "WebFetch(domain:vinfastautothaibinh.com)",
+      "WebFetch(domain:google.com)",
+      "WebFetch(domain:schema.org)",
+      "WebFetch(domain:web.dev)",
+      "WebFetch(domain:nextjs.org)",
+      "WebFetch(domain:tailwindcss.com)",
+      "WebSearch"
+    ],
+    "deny": [
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(rm -rf:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ]
+  },
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+}

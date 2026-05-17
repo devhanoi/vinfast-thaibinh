@@ -1,0 +1,51 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+build/
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# testing
+coverage/
+playwright-report/
+test-results/
+
+# env
+.env
+.env*.local
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# claude local overrides
+CLAUDE.local.md
+
+# competitor screenshots (lớn, không cần commit)
+docs/competitors/*.png
+docs/competitors/*.jpg
+
+# tooling node_modules (separate package)
+tooling/node_modules/
+
+# screenshots are generated artifacts
+docs/screenshots/

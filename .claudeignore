@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+.vercel/
+.turbo/
+*.log
+.DS_Store
+.env*
+!.env.example
+pnpm-lock.yaml
+package-lock.json
+docs/competitors/*.png
+docs/competitors/*.jpg
+public/images/**

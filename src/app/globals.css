@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-be-vietnam: "Be Vietnam Pro", system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { @apply bg-paper text-ink antialiased; font-feature-settings: "ss01" on, "cv11" on; }
+  ::selection { @apply bg-brand text-white; }
+  h1, h2, h3, h4 { @apply tracking-tight; }
+}
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-[1200px] px-4 md:px-6 lg:px-8; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-card transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-paper-line bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink hover:bg-paper-soft;
+  }
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink-soft;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand;
+  }
+  .section { @apply py-16 md:py-20 lg:py-24; }
+  .h-display { @apply font-display text-4xl font-extrabold leading-[1.05] md:text-5xl lg:text-6xl; }
+  .h-section { @apply font-display text-3xl font-bold leading-tight md:text-4xl; }
+}
+
+/* Hide scrollbar for horizontal car gallery on mobile */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
