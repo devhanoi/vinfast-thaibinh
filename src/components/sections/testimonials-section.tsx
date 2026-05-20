@@ -23,7 +23,7 @@ const REVIEWS = [
     car: "VinFast VF 8 Eco",
     rating: 5,
     content:
-      "Đại lý 3S đầy đủ dịch vụ, mình bảo dưỡng định kỳ luôn tại đây. Phụ tùng có sẵn, kỹ thuật viên giải thích rõ ràng từng hạng mục.",
+      "Đại lý đầy đủ dịch vụ, mình bảo dưỡng định kỳ luôn tại đây. Phụ tùng có sẵn, kỹ thuật viên giải thích rõ ràng từng hạng mục.",
   },
 ];
 

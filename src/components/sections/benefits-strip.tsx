@@ -4,7 +4,7 @@ const BENEFITS = [
   {
     icon: Tag,
     title: "Báo giá tốt nhất tháng",
-    desc: "Cam kết khớp giá mọi đại lý 3S khu vực miền Bắc, công khai phí lăn bánh.",
+    desc: "Cam kết khớp giá mọi đại lý ủy quyền khu vực miền Bắc, công khai phí lăn bánh.",
   },
   {
     icon: Wallet,
@@ -18,7 +18,7 @@ const BENEFITS = [
   },
   {
     icon: Settings2,
-    title: "Dịch vụ 3S chuẩn toàn cầu",
+    title: "Dịch vụ chuẩn toàn cầu",
     desc: "Xưởng sửa chữa thân vỏ, máy, sơn đạt chứng nhận VinFast Toàn Cầu.",
   },
 ];

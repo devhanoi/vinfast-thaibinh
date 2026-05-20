@@ -47,7 +47,7 @@ export function buildAutoDealerSchema() {
     "@id": `${SITE.url}/#dealer`,
     name: SITE.name,
     description:
-      "Đại lý ủy quyền 3S chính hãng VinFast tại Thái Bình. Bán xe điện VF 3, VF 5, VF 6, VF 7, VF 8, VF 9, dịch vụ trả góp 80%, lái thử miễn phí, bảo hành chính hãng.",
+      "Đại lý ủy quyền chính hãng VinFast tại Thái Bình. Bán xe điện VF 3, VF 5, VF 6, VF 7, VF 8, VF 9, dịch vụ trả góp 80%, lái thử miễn phí, bảo hành chính hãng.",
     url: SITE.url,
     image: `${SITE.url}/images/og-cover.jpg`,
     logo: `${SITE.url}/images/logo-vinfast.svg`,

@@ -15,7 +15,7 @@ export function WhyUsSection() {
         <div>
           <p className="eyebrow">Vì sao chọn VinFast Thái Bình</p>
           <h2 className="mt-3 h-section text-ink">
-            Đại lý ủy quyền 3S quy mô lớn nhất khu vực Đồng bằng Sông Hồng
+            Đại lý ủy quyền VinFast quy mô lớn nhất khu vực Đồng bằng Sông Hồng
           </h2>
           <p className="mt-4 text-base text-ink-muted">
             VinFast Thái Bình – thành viên hệ sinh thái DragonGroup – đầu tư showroom 3.500 m² tại

@@ -3,7 +3,7 @@ export type FaqItem = { q: string; a: string };
 export const FAQS: FaqItem[] = [
   {
     q: "Đại lý VinFast Thái Bình ở đâu?",
-    a: "VinFast Thái Bình tọa lạc tại Đại Lộ Kỳ Đồng, KĐT Thái Bình Dragon City, Phường Phú Xuân, TP. Thái Bình. Showroom 3S chính hãng với đầy đủ khu trưng bày, xưởng dịch vụ và kho phụ tùng.",
+    a: "VinFast Thái Bình tọa lạc tại Đại Lộ Kỳ Đồng, KĐT Thái Bình Dragon City, Phường Phú Xuân, TP. Thái Bình. Showroom chính hãng với đầy đủ khu trưng bày, xưởng dịch vụ và kho phụ tùng.",
   },
   {
     q: "Hotline VinFast Thái Bình là số nào?",
@@ -36,9 +36,5 @@ export const FAQS: FaqItem[] = [
   {
     q: "Chính sách bảo hành VinFast như thế nào?",
     a: "VinFast bảo hành chính hãng 7 năm hoặc 160.000 km cho toàn xe. Riêng pin xe điện được bảo hành 8 năm hoặc 200.000 km, không giới hạn mức suy giảm dung lượng.",
-  },
-  {
-    q: "Đại lý 3S nghĩa là gì?",
-    a: "3S là viết tắt của Sales – Service – Spareparts: bán xe, dịch vụ sửa chữa & bảo dưỡng, phụ tùng chính hãng. VinFast Thái Bình là đại lý 3S đạt chuẩn VinFast Toàn Cầu, phục vụ trọn vòng đời sản phẩm tại một địa điểm.",
   },
 ];

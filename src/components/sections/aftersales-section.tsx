@@ -12,7 +12,7 @@ export function AftersalesSection() {
     <section id="dich-vu" className="bg-paper-soft section">
       <div className="container-page">
         <div className="max-w-3xl">
-          <p className="eyebrow">Dịch vụ 3S sau bán hàng</p>
+          <p className="eyebrow">Dịch vụ sau bán hàng</p>
           <h2 className="mt-3 h-section text-ink">Đồng hành cùng chủ xe VinFast tại Thái Bình</h2>
           <p className="mt-3 text-base text-ink-muted">
             Showroom VinFast Thái Bình tích hợp Sale – Service – Spareparts, đầu tư xưởng dịch vụ

@@ -1,6 +1,6 @@
 export const SITE = {
   name: "VinFast Thái Bình",
-  legalName: "Đại lý ủy quyền VinFast 3S — DragonGroup",
+  legalName: "Đại lý ủy quyền VinFast — DragonGroup",
   url: "https://vinfast-thaibinh.com",
   hotline: "0962.181.262",
   hotlineE164: "+84962181262",

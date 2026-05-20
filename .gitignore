@@ -49,3 +49,4 @@ tooling/node_modules/
 
 # screenshots are generated artifacts
 docs/screenshots/
+.claude/settings.local.json
