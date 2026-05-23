@@ -1,8 +1,10 @@
 import { BIKES } from "@/content/cars";
 import { formatVND } from "@/lib/utils";
 import { Bike } from "lucide-react";
+import type { CmsProduct } from "@/server/cms/types";
 
-export function BikesSection() {
+export function BikesSection({ bikes }: { bikes?: CmsProduct[] }) {
+  const items = bikes ?? BIKES.map((bike, index) => ({ ...bike, slug: bike.id, rangeText: bike.range, sortOrder: index + 1 }));
   return (
     <section id="xe-may" className="bg-paper-soft section">
       <div className="container-page">
@@ -14,14 +16,14 @@ export function BikesSection() {
           <a href="#lien-he" className="btn-ghost text-xs">Xem chi tiết xe máy</a>
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {BIKES.map((bike) => (
-            <div key={bike.id} className="flex items-center gap-4 rounded-2xl border border-paper-line bg-white p-5 shadow-card">
+          {items.map((bike) => (
+            <div key={bike.slug} className="flex items-center gap-4 rounded-2xl border border-paper-line bg-white p-5 shadow-card">
               <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-light text-brand">
                 <Bike size={22} aria-hidden />
               </div>
               <div className="min-w-0">
                 <p className="font-display text-base font-bold text-ink truncate">{bike.name}</p>
-                <p className="text-xs text-ink-muted">{bike.range}</p>
+                <p className="text-xs text-ink-muted">{bike.rangeText}</p>
                 <p className="mt-1 text-sm font-semibold text-brand">{formatVND(bike.priceFrom)}</p>
               </div>
             </div>

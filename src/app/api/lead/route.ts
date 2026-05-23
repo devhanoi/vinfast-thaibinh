@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { hasDatabaseUrl, prisma } from "@/server/db/prisma";
 
 type Body = {
   name?: string;
@@ -37,8 +38,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Vui lòng chọn dòng xe" }, { status: 400 });
   }
 
-  // TODO: forward to email/CRM (Resend, Google Sheet, etc.) when env keys are configured.
-  console.info("[lead] received", { name, phone, model, address: body.address, note: body.note });
+  const lead = { name, phone, model, address: body.address?.trim(), note: body.note?.trim(), source: "website" };
+  if (hasDatabaseUrl()) {
+    await prisma.lead.create({ data: lead });
+  } else {
+    console.info("[lead] received without DATABASE_URL", lead);
+  }
 
   return NextResponse.json({ ok: true });
 }

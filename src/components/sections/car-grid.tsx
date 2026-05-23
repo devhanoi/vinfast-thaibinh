@@ -1,8 +1,18 @@
 import Image from "next/image";
+import Link from "next/link";
 import { CARS } from "@/content/cars";
 import { formatVND } from "@/lib/utils";
+import type { CmsProduct } from "@/server/cms/types";
 
-export function CarGrid() {
+export function CarGrid({ cars }: { cars?: CmsProduct[] }) {
+  const items =
+    cars ??
+    CARS.map((car, index) => ({
+      ...car,
+      category: "car" as const,
+      sortOrder: index + 1,
+      imageAlt: `${car.name} tại VinFast Thái Bình`,
+    }));
   return (
     <section id="dong-xe" className="bg-paper-soft section">
       <div className="container-page">
@@ -18,15 +28,15 @@ export function CarGrid() {
         </div>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {CARS.map((car) => (
+          {items.map((car) => (
             <article
-              key={car.id}
+              key={car.slug}
               className="group flex flex-col overflow-hidden rounded-2xl border border-paper-line bg-white shadow-card transition hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-paper-soft">
                 <Image
                   src={car.image}
-                  alt={`${car.name} – ${car.segment} bán tại VinFast Thái Bình`}
+                  alt={car.imageAlt ?? `${car.name} – ${car.segment} bán tại VinFast Thái Bình`}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover transition duration-500 group-hover:scale-[1.04]"
@@ -35,11 +45,11 @@ export function CarGrid() {
               <div className="flex flex-1 flex-col gap-3 p-6">
                 <div>
                   <h3 className="font-display text-xl font-bold text-ink">{car.name}</h3>
-                  <p className="text-sm text-ink-muted">{car.segment}</p>
+                  <p className="text-sm text-ink-muted">{car.segment ?? "Đang cập nhật"}</p>
                 </div>
                 <ul className="space-y-1.5 text-sm text-ink-soft">
-                  <li>· Pin {car.battery} – {car.rangeKm} km / lần sạc</li>
-                  {car.highlights.slice(0, 2).map((h) => (
+                  <li>· Pin {car.battery ?? "đang cập nhật"} – {car.rangeKm ? `${car.rangeKm} km` : "đang cập nhật"} / lần sạc</li>
+                  {(car.highlights ?? []).slice(0, 2).map((h) => (
                     <li key={h}>· {h}</li>
                   ))}
                 </ul>
@@ -48,7 +58,7 @@ export function CarGrid() {
                     <p className="text-xs uppercase tracking-wide text-ink-muted">Giá từ</p>
                     <p className="font-display text-2xl font-bold text-brand">{formatVND(car.priceFrom)}</p>
                   </div>
-                  <a href="#bao-gia" className="btn-dark px-4 py-2 text-xs">Báo giá</a>
+                  <Link href={`/xe/${car.slug}`} className="btn-dark px-4 py-2 text-xs">Xem chi tiết</Link>
                 </div>
               </div>
             </article>

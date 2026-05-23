@@ -1,6 +1,8 @@
 import { FAQS } from "@/content/faq";
+import type { CmsFaq } from "@/server/cms/types";
 
-export function FaqSection() {
+export function FaqSection({ faqs }: { faqs?: CmsFaq[] }) {
+  const items = faqs ?? FAQS.map((item, index) => ({ id: item.q, question: item.q, answer: item.a, isActive: true, sortOrder: index + 1 }));
   return (
     <section id="faq" className="section">
       <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
@@ -13,10 +15,10 @@ export function FaqSection() {
           </p>
         </div>
         <div className="divide-y divide-paper-line overflow-hidden rounded-2xl border border-paper-line bg-white shadow-card">
-          {FAQS.map((item, idx) => (
-            <details key={item.q} className="group" open={idx === 0}>
+          {items.map((item, idx) => (
+            <details key={item.id} className="group" open={idx === 0}>
               <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left font-display text-base font-semibold text-ink transition hover:bg-paper-soft">
-                {item.q}
+                {item.question}
                 <span
                   aria-hidden
                   className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-paper-line text-brand transition group-open:rotate-45"
@@ -24,7 +26,7 @@ export function FaqSection() {
                   +
                 </span>
               </summary>
-              <div className="px-6 pb-6 text-sm leading-relaxed text-ink-muted">{item.a}</div>
+              <div className="px-6 pb-6 text-sm leading-relaxed text-ink-muted">{item.answer}</div>
             </details>
           ))}
         </div>

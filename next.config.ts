@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const r2PublicUrl = process.env.R2_PUBLIC_BASE_URL ? new URL(process.env.R2_PUBLIC_BASE_URL) : null;
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -15,6 +17,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "vinfastauto.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "source.unsplash.com" },
+      ...(r2PublicUrl ? [{ protocol: "https" as const, hostname: r2PublicUrl.hostname }] : []),
     ],
   },
   async headers() {

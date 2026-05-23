@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro } from "next/font/google";
 import Script from "next/script";
 import { SITE } from "@/lib/site";
 import { buildAllSchemas } from "@/lib/schema";
+import { AppProviders } from "./providers";
 import "./globals.css";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -76,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         ))}
       </head>
-      <body className="min-h-screen font-sans">{children}</body>
+      <body className="min-h-screen font-sans"><AppProviders>{children}</AppProviders></body>
     </html>
   );
 }

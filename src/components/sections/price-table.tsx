@@ -1,8 +1,10 @@
 import { CARS } from "@/content/cars";
 import { formatVND } from "@/lib/utils";
 import { SITE } from "@/lib/site";
+import type { CmsProduct, SiteSettings } from "@/server/cms/types";
 
-export function PriceTable() {
+export function PriceTable({ cars, site = SITE }: { cars?: CmsProduct[]; site?: SiteSettings }) {
+  const items = cars ?? CARS.map((car, index) => ({ ...car, category: "car" as const, sortOrder: index + 1 }));
   return (
     <section id="bang-gia" className="section">
       <div className="container-page">
@@ -12,7 +14,7 @@ export function PriceTable() {
             Bảng giá xe VinFast tại Thái Bình – cập nhật tháng mới nhất
           </h2>
           <p className="mt-3 text-base text-ink-muted">
-            Giá niêm yết áp dụng thống nhất toàn quốc. Liên hệ {SITE.hotline} để nhận báo giá lăn
+            Giá niêm yết áp dụng thống nhất toàn quốc. Liên hệ {site.hotline} để nhận báo giá lăn
             bánh chính xác cho từng huyện/thành phố và chương trình ưu đãi đang triển khai tại
             Thái Bình.
           </p>
@@ -31,14 +33,14 @@ export function PriceTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-paper-line">
-                {CARS.map((car) => (
-                  <tr key={car.id} className="hover:bg-paper-soft">
+                {items.map((car) => (
+                  <tr key={car.slug} className="hover:bg-paper-soft">
                     <th scope="row" className="px-4 py-4 text-left font-semibold text-ink md:px-6">
                       {car.name}
                     </th>
                     <td className="px-4 py-4 text-ink-muted md:px-6">{car.segment}</td>
-                    <td className="px-4 py-4 text-ink-muted md:px-6">{car.battery}</td>
-                    <td className="px-4 py-4 text-ink-muted md:px-6">{car.rangeKm} km</td>
+                    <td className="px-4 py-4 text-ink-muted md:px-6">{car.battery ?? "Đang cập nhật"}</td>
+                    <td className="px-4 py-4 text-ink-muted md:px-6">{car.rangeKm ? `${car.rangeKm} km` : "Đang cập nhật"}</td>
                     <td className="px-4 py-4 text-right font-semibold text-brand md:px-6">
                       {formatVND(car.priceFrom)}
                     </td>

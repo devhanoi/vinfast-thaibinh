@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { SERVICE_CARS } from "@/content/cars";
 import { formatVND } from "@/lib/utils";
+import type { CmsProduct } from "@/server/cms/types";
 
-export function ServiceCarsSection() {
+export function ServiceCarsSection({ cars }: { cars?: CmsProduct[] }) {
+  const items = cars ?? SERVICE_CARS.map((car, index) => ({ ...car, slug: car.id, sortOrder: index + 1 }));
   return (
     <section id="xe-dich-vu" className="section">
       <div className="container-page">
@@ -15,12 +17,12 @@ export function ServiceCarsSection() {
           </p>
         </div>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {SERVICE_CARS.map((car) => (
-            <article key={car.id} className="overflow-hidden rounded-2xl border border-paper-line bg-white shadow-card">
+          {items.map((car) => (
+            <article key={car.slug} className="overflow-hidden rounded-2xl border border-paper-line bg-white shadow-card">
               <div className="relative aspect-[16/10]">
                 <Image
                   src={car.image}
-                  alt={`${car.name} – ${car.tagline} tại VinFast Thái Bình`}
+                  alt={`${car.name} – ${car.tagline ?? "xe điện dịch vụ"} tại VinFast Thái Bình`}
                   fill
                   sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover"

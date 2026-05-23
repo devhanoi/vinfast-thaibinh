@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AdminRole {
+  admin
+}
+
+enum ProductCategory {
+  car
+  service_car
+  bike
+}
+
+enum PublishStatus {
+  draft
+  active
+  archived
+}
+
+enum LeadStatus {
+  new
+  contacted
+  won
+  lost
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         AdminRole @default(admin)
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  sessions     Session[]
+
+  @@map("admin_users")
+}
+
+model Session {
+  id          String    @id @default(cuid())
+  adminUserId String    @map("admin_user_id")
+  tokenHash   String    @unique @map("token_hash")
+  expiresAt   DateTime  @map("expires_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  user        AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model StoreSetting {
+  key       String   @id
+  valueJson Json     @map("value_json")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("store_settings")
+}
+
+model SeoSetting {
+  id            String   @id @default(cuid())
+  pageKey       String   @unique @map("page_key")
+  title         String
+  description   String
+  ogImageUrl    String?  @map("og_image_url")
+  canonicalPath String   @default("/") @map("canonical_path")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("seo_settings")
+}
+
+model Product {
+  id             String          @id @default(cuid())
+  slug           String          @unique
+  name           String
+  category       ProductCategory @default(car)
+  segment        String?
+  tagline        String?
+  priceFrom      Int             @map("price_from")
+  battery        String?
+  rangeKm        Int?            @map("range_km")
+  rangeText      String?         @map("range_text")
+  specsJson      Json            @default("{}") @map("specs_json")
+  highlightsJson Json            @default("[]") @map("highlights_json")
+  status         PublishStatus   @default(active)
+  sortOrder      Int             @default(0) @map("sort_order")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  images         ProductImage[]
+
+  @@index([category, status, sortOrder])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  url       String
+  key       String?
+  alt       String
+  color     String?
+  angle     String?
+  isPrimary Boolean  @default(false) @map("is_primary")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, isPrimary, sortOrder])
+  @@map("product_images")
+}
+
+model HeroSlide {
+  id        String        @id @default(cuid())
+  title     String
+  subtitle  String
+  imageUrl  String        @map("image_url")
+  imageAlt  String        @map("image_alt")
+  ctaLabel  String        @map("cta_label")
+  ctaHref   String        @map("cta_href")
+  isActive  Boolean       @default(true) @map("is_active")
+  sortOrder Int           @default(0) @map("sort_order")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder])
+  @@map("hero_slides")
+}
+
+model Faq {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder])
+  @@map("faqs")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  content   String
+  rating    Int      @default(5)
+  location  String?
+  vehicle   String?
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder])
+  @@map("testimonials")
+}
+
+model ChargingStation {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  district  String
+  mapUrl    String?  @map("map_url")
+  lat       Decimal? @db.Decimal(9, 6)
+  lng       Decimal? @db.Decimal(9, 6)
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([district, isActive, sortOrder])
+  @@map("charging_stations")
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  name      String
+  phone     String
+  model     String
+  address   String?
+  note      String?
+  status    LeadStatus @default(new)
+  source    String     @default("website")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("leads")
+}

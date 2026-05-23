@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { Loader2, Check, AlertCircle } from "lucide-react";
 import { CARS } from "@/content/cars";
+import type { CmsProduct } from "@/server/cms/types";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export function TestDriveForm({ id = "lai-thu" }: { id?: string }) {
+export function TestDriveForm({ id = "lai-thu", cars }: { id?: string; cars?: CmsProduct[] }) {
+  const items = cars ?? CARS.map((car) => ({ id: car.id, name: car.name }));
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -68,7 +70,7 @@ export function TestDriveForm({ id = "lai-thu" }: { id?: string }) {
                 className="mt-1.5 block w-full rounded-xl border border-paper-line bg-white px-4 py-3 text-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
               >
                 <option value="" disabled>Chọn dòng xe...</option>
-                {CARS.map((c) => (
+                {items.map((c) => (
                   <option key={c.id} value={c.name}>{c.name}</option>
                 ))}
                 <option value="VinFast khác">Tư vấn dòng phù hợp</option>

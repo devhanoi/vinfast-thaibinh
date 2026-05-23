@@ -23,7 +23,7 @@ export const CARS: Car[] = [
     battery: "18.64 kWh",
     rangeKm: 210,
     highlights: ["4 chỗ ngồi rộng rãi", "Sạc nhanh 36 phút", "Bảo hành 7 năm"],
-    image: "/images/cars/vf-3-2.png",
+    image: "/images/cars/vf3/vf3-xanh-duong-goc-truoc.jpg",
   },
   {
     id: "vf5",
@@ -34,7 +34,7 @@ export const CARS: Car[] = [
     battery: "37.23 kWh",
     rangeKm: 326,
     highlights: ["5 chỗ rộng nhất phân khúc", "ADAS cơ bản", "Phanh đĩa 4 bánh"],
-    image: "/images/cars/vf-5-2.jpg",
+    image: "/images/cars/vf5/vf5-trang-goc-nghieng.jpg",
   },
   {
     id: "vf6",
@@ -45,7 +45,7 @@ export const CARS: Car[] = [
     battery: "59.6 kWh",
     rangeKm: 460,
     highlights: ["Mô-men xoắn 250 Nm", "Màn hình 12.9 inch", "ADAS Level 2"],
-    image: "/images/cars/vf-6-1.jpg",
+    image: "/images/cars/vf6/vf6-xanh-reu-goc-truoc.jpg",
   },
   {
     id: "vf7",
@@ -56,7 +56,7 @@ export const CARS: Car[] = [
     battery: "75.3 kWh",
     rangeKm: 510,
     highlights: ["Thiết kế GT thể thao", "AWD tùy chọn", "Cabin yên tĩnh"],
-    image: "/images/cars/vf-7-1.jpg",
+    image: "/images/cars/vf7/vf7-xanh-reu-goc-ngang.jpg",
   },
   {
     id: "vf8",
@@ -67,7 +67,7 @@ export const CARS: Car[] = [
     battery: "82 kWh",
     rangeKm: 471,
     highlights: ["AWD 300 kW", "Ghế da Nappa", "Smart Services"],
-    image: "/images/cars/vf-8-1.jpg",
+    image: "/images/cars/vf8/vf8-do-goc-ngang.jpg",
   },
   {
     id: "vf9",
@@ -78,7 +78,7 @@ export const CARS: Car[] = [
     battery: "92 kWh",
     rangeKm: 438,
     highlights: ["7 chỗ 3 hàng ghế", "Khoang cabin sang trọng", "AWD 300 kW"],
-    image: "/images/cars/vf-9-1.jpg",
+    image: "/images/cars/vf9/vf9-trang-goc-nghieng.jpg",
   },
 ];
 
@@ -92,21 +92,21 @@ export const SERVICE_CARS: ServiceCar[] = [
     name: "Minio Green",
     priceFrom: 269_000_000,
     tagline: "Xe điện 4 chỗ phục vụ taxi đô thị",
-    image: "/images/cars/vf-3-2.png",
+    image: "/images/cars/vf3/vf3-xanh-duong-goc-truoc.jpg",
   },
   {
     id: "herio-green",
     name: "Herio Green",
     priceFrom: 499_000_000,
     tagline: "Xe điện 5 chỗ tối ưu chi phí vận hành",
-    image: "/images/cars/vf-5-2.jpg",
+    image: "/images/cars/vf5/vf5-trang-goc-nghieng.jpg",
   },
   {
     id: "limo-green",
     name: "Limo Green",
     priceFrom: 749_000_000,
     tagline: "MPV 7 chỗ chuyên dịch vụ Xanh SM",
-    image: "/images/cars/vf-9-1.jpg",
+    image: "/images/cars/vf9/vf9-trang-goc-nghieng.jpg",
   },
 ];
 

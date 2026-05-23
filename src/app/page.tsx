@@ -14,27 +14,32 @@ import { TestimonialsSection } from "@/components/sections/testimonials-section"
 import { FaqSection } from "@/components/sections/faq-section";
 import { ContactFooter } from "@/components/sections/contact-footer";
 import { StickyMobileCTA } from "@/components/sections/sticky-mobile-cta";
+import { FloatingChat } from "@/components/sections/floating-chat";
+import { getHomePageData } from "@/server/cms/data";
 
-export default function HomePage() {
+export const revalidate = 300;
+
+export default async function HomePage() {
+  const data = await getHomePageData();
   return (
     <>
-      <SiteHeader />
+      <SiteHeader site={data.site} />
       <main className="pb-20 md:pb-0">
-        <HeroSection />
+        <HeroSection slides={data.heroSlides} site={data.site} />
         <BenefitsStrip />
-        <PriceTable />
-        <CarGrid />
-        <ServiceCarsSection />
-        <BikesSection />
+        <PriceTable cars={data.cars} site={data.site} />
+        <CarGrid cars={data.cars} />
+        <ServiceCarsSection cars={data.serviceCars} />
+        <BikesSection bikes={data.bikes} />
         <FinanceSection />
-        <TestDriveForm />
-        <ChargingMapSection />
+        <TestDriveForm cars={data.cars} />
+        <ChargingMapSection districts={data.chargingStations} totalStations={data.totalStations} />
         <AftersalesSection />
         <WhyUsSection />
-        <TestimonialsSection />
-        <FaqSection />
+        <TestimonialsSection testimonials={data.testimonials} />
+        <FaqSection faqs={data.faqs} />
       </main>
-      <ContactFooter />
+      <ContactFooter site={data.site} />
       <StickyMobileCTA />
     </>
   );

@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import type { CmsTestimonial } from "@/server/cms/types";
 
 const REVIEWS = [
   {
@@ -27,7 +28,8 @@ const REVIEWS = [
   },
 ];
 
-export function TestimonialsSection() {
+export function TestimonialsSection({ testimonials }: { testimonials?: CmsTestimonial[] }) {
+  const items = testimonials ?? REVIEWS.map((r, index) => ({ ...r, id: r.name, location: r.place, vehicle: r.car, isActive: true, sortOrder: index + 1 }));
   return (
     <section className="bg-paper-soft section">
       <div className="container-page">
@@ -36,8 +38,8 @@ export function TestimonialsSection() {
           <h2 className="mt-3 h-section text-ink">Những hành trình điện hóa đầu tiên trên đất Thái Bình</h2>
         </div>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {REVIEWS.map((r) => (
-            <figure key={r.name} className="flex h-full flex-col rounded-2xl border border-paper-line bg-white p-6 shadow-card">
+          {items.map((r) => (
+            <figure key={r.id} className="flex h-full flex-col rounded-2xl border border-paper-line bg-white p-6 shadow-card">
               <div className="flex gap-0.5 text-brand" aria-label={`${r.rating} sao`}>
                 {Array.from({ length: r.rating }).map((_, i) => (
                   <Star key={i} size={16} fill="currentColor" stroke="none" aria-hidden />
@@ -49,7 +51,7 @@ export function TestimonialsSection() {
               <figcaption className="mt-4 border-t border-paper-line pt-4 text-sm">
                 <p className="font-semibold text-ink">{r.name}</p>
                 <p className="text-xs text-ink-muted">
-                  {r.place} · {r.car}
+                  {r.location} · {r.vehicle}
                 </p>
               </figcaption>
             </figure>

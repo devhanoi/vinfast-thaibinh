@@ -1,14 +1,32 @@
 import { MapPin } from "lucide-react";
 import { CHARGING_STATIONS, TOTAL_STATIONS } from "@/content/charging-stations";
+import type { CmsChargingStation } from "@/server/cms/types";
 
-export function ChargingMapSection() {
+export function ChargingMapSection({
+  districts,
+  totalStations,
+}: {
+  districts?: { district: string; stations: CmsChargingStation[] }[];
+  totalStations?: number;
+}) {
+  const items = districts ?? CHARGING_STATIONS.map((d, districtIndex) => ({
+    district: d.district,
+    stations: d.stations.map((s, stationIndex) => ({
+      id: `${districtIndex}-${stationIndex}`,
+      ...s,
+      district: d.district,
+      mapUrl: null,
+      isActive: true,
+      sortOrder: stationIndex + 1,
+    })),
+  }));
   return (
     <section id="tram-sac" className="section">
       <div className="container-page">
         <div className="max-w-3xl">
           <p className="eyebrow">Hệ thống V-Green tại Thái Bình</p>
           <h2 className="mt-3 h-section text-ink">
-            {TOTAL_STATIONS} trạm sạc VinFast phủ kín TP. Thái Bình &amp; 7 huyện
+            {totalStations ?? TOTAL_STATIONS} trạm sạc VinFast phủ kín TP. Thái Bình &amp; 7 huyện
           </h2>
           <p className="mt-3 text-base text-ink-muted">
             Sạc nhanh DC 30–60 kW cho ô tô và sạc AC 11 kW cho xe máy. Khách mua xe tại VinFast
@@ -18,7 +36,7 @@ export function ChargingMapSection() {
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
           <div className="grid gap-3 self-start">
-            {CHARGING_STATIONS.map((d) => (
+            {items.map((d) => (
               <details
                 key={d.district}
                 className="group rounded-2xl border border-paper-line bg-white shadow-card open:shadow-lg"
