@@ -4,19 +4,23 @@ import { CHARGING_STATIONS, TOTAL_STATIONS } from "@/content/charging-stations";
 import { SITE } from "@/lib/site";
 import type { CmsProduct, HomePageData } from "./types";
 
-function fallbackProduct(item: {
-  id: string;
-  slug?: string;
-  name: string;
-  segment?: string;
-  tagline?: string;
-  priceFrom: number;
-  battery?: string;
-  rangeKm?: number;
-  range?: string;
-  highlights?: string[];
-  image?: string;
-}, category: CmsProduct["category"], sortOrder: number): CmsProduct {
+function fallbackProduct(
+  item: {
+    id: string;
+    slug?: string;
+    name: string;
+    segment?: string;
+    tagline?: string;
+    priceFrom: number;
+    battery?: string;
+    rangeKm?: number;
+    range?: string;
+    highlights?: string[];
+    image?: string;
+  },
+  category: CmsProduct["category"],
+  sortOrder: number,
+): CmsProduct {
   const image = item.image ?? "/images/cars/vf3/vf3-xanh-duong-goc-truoc.jpg";
   return {
     id: item.id,
@@ -59,8 +63,8 @@ export function getFallbackHomePageData(): HomePageData {
     site: SITE,
     seo: {
       pageKey: "home",
-      title: `${SITE.name} | Đại lý 3S chính hãng - ${SITE.hotline}`,
-      description: `Đại lý VinFast Thái Bình 3S chính hãng tại Đại Lộ Kỳ Đồng - báo giá VF3, VF5, VF6, VF7, VF8, VF9, trả góp 80%, lái thử miễn phí.`,
+      title: `${SITE.name} | Đại lý ủy quyền chính hãng - ${SITE.hotline}`,
+      description: `Đại lý ủy quyền VinFast Thái Bình chính hãng tại Đại Lộ Kỳ Đồng - báo giá VF3, VF5, VF6, VF7, VF8, VF9, trả góp 80%, lái thử miễn phí.`,
       ogImageUrl: "/images/og-cover.jpg",
       canonicalPath: "/",
     },
@@ -68,9 +72,9 @@ export function getFallbackHomePageData(): HomePageData {
       {
         id: "fallback-hero",
         title: "Đại lý VinFast Thái Bình",
-        subtitle: "Showroom 3S chính hãng, báo giá xe điện VinFast mới nhất, hỗ trợ trả góp và lái thử tận nhà.",
-        imageUrl: "/images/cars/vf3/vf3-xanh-duong-goc-truoc.jpg",
-        imageAlt: "VinFast VF 3 tại VinFast Thái Bình",
+        subtitle: "Showroom chính hãng, báo giá xe điện VinFast mới nhất, hỗ trợ trả góp và lái thử tận nhà.",
+        imageUrl: "/images/slide/teasing-desktop_new.png",
+        imageAlt: "VinFast Thái Bình – các dòng xe điện",
         ctaLabel: "Nhận báo giá ngay",
         ctaHref: "#bao-gia",
         isActive: true,
@@ -118,7 +122,7 @@ export function getFallbackHomePageData(): HomePageData {
         vehicle: "VinFast VF 8 Eco",
         rating: 5,
         content:
-          "Đại lý 3S đầy đủ dịch vụ, mình bảo dưỡng định kỳ luôn tại đây. Phụ tùng có sẵn, kỹ thuật viên giải thích rõ ràng từng hạng mục.",
+          "Đại lý đầy đủ dịch vụ, mình bảo dưỡng định kỳ luôn tại đây. Phụ tùng có sẵn, kỹ thuật viên giải thích rõ ràng từng hạng mục.",
         isActive: true,
         sortOrder: 3,
       },
