@@ -1,4 +1,9 @@
+import { config as loadEnv } from "dotenv";
+loadEnv({ path: ".env.local" });
+loadEnv({ path: ".env" });
+
 import { PrismaClient } from "@prisma/client";
+import { PrismaNeon } from "@prisma/adapter-neon";
 import bcrypt from "bcryptjs";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -7,7 +12,14 @@ import { FAQS } from "../src/content/faq";
 import { CHARGING_STATIONS } from "../src/content/charging-stations";
 import { SITE } from "../src/lib/site";
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error("[seed] DATABASE_URL chưa set. Cập nhật .env.local với connection string Neon thật.");
+  process.exit(1);
+}
+
+const adapter = new PrismaNeon({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 const TESTIMONIALS = [
   {
@@ -153,40 +165,64 @@ async function seedProducts() {
 }
 
 async function main() {
+  console.log("[seed] bắt đầu seed Neon DB…");
   await prisma.storeSetting.upsert({
     where: { key: "site" },
     update: { valueJson: SITE },
     create: { key: "site", valueJson: SITE },
   });
+  console.log("[seed] StoreSetting ✓");
 
   await prisma.seoSetting.upsert({
     where: { pageKey: "home" },
     update: {},
     create: {
       pageKey: "home",
-      title: `${SITE.name} | Đại lý 3S chính hãng - ${SITE.hotline}`,
-      description: `Đại lý VinFast Thái Bình 3S chính hãng tại Đại Lộ Kỳ Đồng - báo giá VF3, VF5, VF6, VF7, VF8, VF9, trả góp 80%, lái thử miễn phí.`,
+      title: `${SITE.name} | Đại lý ủy quyền chính hãng - ${SITE.hotline}`,
+      description: `Đại lý ủy quyền VinFast Thái Bình tại Đại Lộ Kỳ Đồng - báo giá VF3, VF5, VF6, VF7, VF8, VF9, trả góp 80%, lái thử miễn phí.`,
       ogImageUrl: "/images/og-cover.jpg",
       canonicalPath: "/",
     },
   });
 
-  await prisma.heroSlide.upsert({
-    where: { id: "home-hero-main" },
-    update: {},
-    create: {
-      id: "home-hero-main",
-      title: "Đại lý VinFast Thái Bình",
-      subtitle: "Showroom 3S chính hãng, báo giá xe điện VinFast mới nhất, hỗ trợ trả góp và lái thử tận nhà.",
-      imageUrl: "/images/cars/vf3/vf3-xanh-duong-goc-truoc.jpg",
-      imageAlt: "VinFast VF 3 tại VinFast Thái Bình",
-      ctaLabel: "Nhận báo giá ngay",
-      ctaHref: "#bao-gia",
-      sortOrder: 1,
-    },
-  });
+  const HERO_SLIDES = [
+    { file: "teasing-desktop_new.png", title: "VinFast – Tương lai đã có mặt", subtitle: "Xe điện thế hệ mới đã có tại Thái Bình", alt: "VinFast ra mắt dòng xe điện thế hệ mới" },
+    { file: "vinfast-vf3-sanh-dieu-sang-tao-desktop.png", title: "VinFast VF3 – Sành điệu, sáng tạo", subtitle: "Mini SUV đô thị cho giới trẻ", alt: "VinFast VF3 sành điệu, sáng tạo cho giới trẻ" },
+    { file: "vf_8_the_he_moi_deskotp_new.jpg", title: "VinFast VF8 thế hệ mới", subtitle: "SUV điện cao cấp – sẵn sàng giao xe", alt: "VinFast VF8 thế hệ mới – SUV điện cao cấp" },
+    { file: "vinfast-vf-mpv7-ban-dong-hanh-dai-gia-dinh-desktop.jpg", title: "VinFast MPV7", subtitle: "Đồng hành cùng đại gia đình", alt: "VinFast MPV7 đồng hành cùng đại gia đình" },
+    { file: "vinfast-giai-phap-di-chuyen-xanh-ben-vung-desktop.jpg", title: "Di chuyển xanh bền vững", subtitle: "Giải pháp đi lại không khí thải", alt: "VinFast – giải pháp di chuyển xanh bền vững" },
+    { file: "vinfast-len-doi-xe-xanh-toi-uu-chi-phi-desktop.jpg", title: "Lên đời xe xanh", subtitle: "Tối ưu chi phí vận hành, trade-in tới 30 triệu", alt: "Lên đời xe xanh VinFast – tối ưu chi phí vận hành" },
+    { file: "vinfast-dau-tu-0-dong-sinh-loi-tren-tung-km-desktop.jpg", title: "Đầu tư 0 đồng", subtitle: "Sinh lời trên từng kilomet cùng VinFast", alt: "Đầu tư 0 đồng, sinh lời trên từng km cùng VinFast" },
+  ];
+
+  for (const [index, slide] of HERO_SLIDES.entries()) {
+    const id = `hero-${index + 1}`;
+    await prisma.heroSlide.upsert({
+      where: { id },
+      update: {
+        title: slide.title,
+        subtitle: slide.subtitle,
+        imageUrl: `/images/slide/${slide.file}`,
+        imageAlt: slide.alt,
+        sortOrder: index + 1,
+      },
+      create: {
+        id,
+        title: slide.title,
+        subtitle: slide.subtitle,
+        imageUrl: `/images/slide/${slide.file}`,
+        imageAlt: slide.alt,
+        ctaLabel: "Nhận báo giá ngay",
+        ctaHref: "#bao-gia",
+        sortOrder: index + 1,
+      },
+    });
+  }
+
+  console.log("[seed] SEO ✓ · Hero slides ✓");
 
   await seedProducts();
+  console.log("[seed] Products + Images ✓");
 
   for (const [index, faq] of FAQS.entries()) {
     await prisma.faq.upsert({
@@ -216,6 +252,8 @@ async function main() {
     }
   }
 
+  console.log("[seed] FAQs + Testimonials + Charging stations ✓");
+
   if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
     await prisma.adminUser.upsert({
       where: { email: process.env.ADMIN_EMAIL },
@@ -225,7 +263,12 @@ async function main() {
         passwordHash: await bcrypt.hash(process.env.ADMIN_PASSWORD, 12),
       },
     });
+    console.log(`[seed] AdminUser ${process.env.ADMIN_EMAIL} ✓`);
+  } else {
+    console.warn("[seed] ⚠ ADMIN_EMAIL + ADMIN_PASSWORD chưa set → không tạo admin user");
   }
+
+  console.log("[seed] ✅ DONE");
 }
 
 main()
