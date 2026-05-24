@@ -3,11 +3,11 @@ import Image from "next/image";
 const NATURAL_WIDTH = 2369;
 const NATURAL_HEIGHT = 463;
 
-export function Logo({
-  width = 160,
+export function VinFastLogo({
+  width = 140,
   className,
   priority = false,
-  alt = "VinFast Thái Bình",
+  alt = "VinFast",
 }: {
   width?: number;
   className?: string;

@@ -17,10 +17,12 @@ export function SiteHeader({ site = SITE }: { site?: SiteSettings }) {
     <header className="sticky top-0 z-40 border-b border-paper-line/80 bg-paper/90 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3" aria-label={site.name}>
-          <VinFastLogo className="h-7" />
+          <VinFastLogo width={120} className="h-7 w-auto" />
           <span className="hidden h-6 w-px bg-paper-line sm:block" aria-hidden />
           <span className="hidden flex-col leading-tight sm:flex">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">Đại lý 3S</span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
+              Đại lý ủy quyền
+            </span>
             <span className="font-display text-sm font-bold text-ink">Thái Bình</span>
           </span>
         </Link>

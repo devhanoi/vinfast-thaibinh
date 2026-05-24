@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import type { CmsHeroSlide } from "@/server/cms/types";
 
-const SLIDES = [
+type Slide = { src: string; alt: string };
+
+const FALLBACK_SLIDES: Slide[] = [
   { src: "/images/slide/teasing-desktop_new.png", alt: "VinFast ra mắt dòng xe điện thế hệ mới" },
   { src: "/images/slide/vinfast-vf3-sanh-dieu-sang-tao-desktop.png", alt: "VinFast VF3 sành điệu, sáng tạo cho giới trẻ" },
   { src: "/images/slide/vf_8_the_he_moi_deskotp_new.jpg", alt: "VinFast VF8 thế hệ mới – SUV điện cao cấp" },
@@ -16,21 +19,27 @@ const SLIDES = [
 const AUTOPLAY_MS = 5000;
 const TRANSITION_MS = 800;
 
-export function HeroSlider() {
+export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
+  const slides: Slide[] =
+    cmsSlides && cmsSlides.length > 0
+      ? cmsSlides.map((s) => ({ src: s.imageUrl, alt: s.imageAlt || s.title }))
+      : FALLBACK_SLIDES;
+
   const [index, setIndex] = useState(0);
   const [transitionOn, setTransitionOn] = useState(true);
-  const track = [...SLIDES, SLIDES[0]];
+  const track = [...slides, slides[0]];
 
   useEffect(() => {
+    if (slides.length <= 1) return;
     const id = setInterval(() => {
       setTransitionOn(true);
       setIndex((i) => i + 1);
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, []);
+  }, [slides.length]);
 
   const handleTransitionEnd = () => {
-    if (index !== SLIDES.length) return;
+    if (index !== slides.length) return;
     setTransitionOn(false);
     setIndex(0);
     requestAnimationFrame(() => requestAnimationFrame(() => setTransitionOn(true)));
@@ -42,7 +51,7 @@ export function HeroSlider() {
   };
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden">
+    <div className="relative aspect-[4/5] w-full overflow-hidden md:aspect-[21/9]">
       <div
         className="flex h-full w-full will-change-transform"
         onTransitionEnd={handleTransitionEnd}
@@ -59,26 +68,29 @@ export function HeroSlider() {
               fill
               sizes="100vw"
               priority={i === 0}
-              className="object-cover opacity-65"
+              className="object-cover"
             />
           </div>
         ))}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-ink via-ink/80 to-transparent" />
-      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-6">
-        {SLIDES.map((_, i) => {
-          const active = (index % SLIDES.length) === i;
-          return (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Chuyển tới slide ${i + 1}`}
-              onClick={() => goTo(i)}
-              className={`h-1.5 rounded-full transition-all ${active ? "w-8 bg-brand" : "w-4 bg-white/40 hover:bg-white/70"}`}
-            />
-          );
-        })}
-      </div>
+      {slides.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-6">
+          {slides.map((_, i) => {
+            const active = index % slides.length === i;
+            return (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Chuyển tới slide ${i + 1}`}
+                onClick={() => goTo(i)}
+                className={`h-1.5 rounded-full transition-all ${
+                  active ? "w-8 bg-brand" : "w-4 bg-white/40 hover:bg-white/70"
+                }`}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
