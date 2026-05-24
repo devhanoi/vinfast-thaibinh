@@ -4,10 +4,10 @@ import { listProducts, getProductBySlug as svcGetBySlug } from "../services/prod
 import { getStoreSettings as svcGetStore } from "../services/store";
 import { getSeo } from "../services/seo";
 import type { CmsProduct, SiteSettings } from "./types";
-import type { ProductEntityT } from "@/lib/zod";
+import type { ProductEntityT, ProductImageEntityT } from "@/lib/zod";
 
 function toCmsProduct(p: ProductEntityT): CmsProduct {
-  const primary = p.images.find((img) => img.isPrimary) ?? p.images[0];
+  const primary = p.images.find((img: ProductImageEntityT) => img.isPrimary) ?? p.images[0];
   return {
     ...p,
     image: primary?.url ?? "/images/cars/vf3/vf3-xanh-duong-goc-truoc.jpg",

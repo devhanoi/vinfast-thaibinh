@@ -24,13 +24,14 @@ import type {
   FaqEntityT,
   HeroSlideEntityT,
   ProductEntityT,
+  ProductImageEntityT,
   SeoEntityT,
   StoreSettingsEntityT,
   TestimonialEntityT,
 } from "@/lib/zod";
 
 function toCmsProduct(p: ProductEntityT): CmsProduct {
-  const primary = p.images.find((img) => img.isPrimary) ?? p.images[0];
+  const primary = p.images.find((img: ProductImageEntityT) => img.isPrimary) ?? p.images[0];
   return {
     id: p.id,
     slug: p.slug,
