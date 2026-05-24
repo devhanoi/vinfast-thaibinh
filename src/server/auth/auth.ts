@@ -13,13 +13,6 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    uid?: string;
-    role?: "admin";
-  }
-}
-
 export const { auth, signIn, signOut, handlers } = NextAuth({
   ...authConfig,
   providers: [
@@ -46,14 +39,15 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         const u = user as { id: string; role: "admin" };
-        token.uid = u.id;
-        token.role = u.role;
+        (token as Record<string, unknown>).uid = u.id;
+        (token as Record<string, unknown>).role = u.role;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token.uid) session.user.id = token.uid;
-      if (token.role) session.user.role = token.role;
+      const t = token as Record<string, unknown>;
+      if (typeof t.uid === "string") session.user.id = t.uid;
+      if (t.role === "admin") session.user.role = t.role;
       return session;
     },
   },
