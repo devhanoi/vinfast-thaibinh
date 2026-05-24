@@ -60,18 +60,21 @@ export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
           transition: transitionOn ? `transform ${TRANSITION_MS}ms ease-in-out` : "none",
         }}
       >
-        {track.map((slide, i) => (
-          <div key={i} className="relative h-full w-full shrink-0">
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              sizes="100vw"
-              priority={i === 0}
-              className="object-cover"
-            />
-          </div>
-        ))}
+        {track.map((slide, i) => {
+          const isActive = i === index % slides.length;
+          return (
+            <div key={i} className="relative h-full w-full shrink-0 overflow-hidden">
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                sizes="100vw"
+                priority={i === 0}
+                className={`object-cover ${isActive ? "ken-burns" : ""}`}
+              />
+            </div>
+          );
+        })}
       </div>
       {slides.length > 1 && (
         <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-6">
