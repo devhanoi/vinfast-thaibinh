@@ -9,7 +9,15 @@ import { ImageUploader } from "./image-uploader";
 export type FieldDef = {
   name: string;
   label: string;
-  type: "text" | "textarea" | "number" | "checkbox" | "select" | "url" | "image";
+  type:
+    | "text"
+    | "textarea"
+    | "number"
+    | "checkbox"
+    | "select"
+    | "url"
+    | "image"
+    | "stringArray";
   required?: boolean;
   placeholder?: string;
   hint?: string;
@@ -61,7 +69,13 @@ export function ResourceForm<TInput>({
       const v = fd.get(f.name);
       if (f.type === "checkbox") raw[f.name] = v === "on";
       else if (f.type === "number") raw[f.name] = v === null || v === "" ? undefined : Number(v);
-      else raw[f.name] = v === "" ? undefined : v;
+      else if (f.type === "stringArray") {
+        const lines = String(v ?? "")
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        raw[f.name] = lines;
+      } else raw[f.name] = v === "" ? undefined : v;
     }
     try {
       const parsed = schema.parse(raw);
@@ -121,7 +135,9 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
   const defaultStr =
     def.defaultValue === undefined ? undefined : String(def.defaultValue);
   const wrapClass =
-    def.type === "textarea" || def.type === "image" ? "md:col-span-2" : "";
+    def.type === "textarea" || def.type === "image" || def.type === "stringArray"
+      ? "md:col-span-2"
+      : "";
 
   return (
     <label className={`block text-sm font-semibold text-ink-soft ${wrapClass}`}>
@@ -131,13 +147,13 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
       </span>
       {def.hint && <span className="mt-0.5 block text-xs font-normal text-ink-muted">{def.hint}</span>}
 
-      {def.type === "textarea" ? (
+      {def.type === "textarea" || def.type === "stringArray" ? (
         <textarea
           name={def.name}
           required={def.required}
           placeholder={def.placeholder}
           defaultValue={defaultStr}
-          rows={def.rows ?? 3}
+          rows={def.rows ?? (def.type === "stringArray" ? 4 : 3)}
           className={`${inputClass} ${errClass}`}
         />
       ) : def.type === "checkbox" ? (
