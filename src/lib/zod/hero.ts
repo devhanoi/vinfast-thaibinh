@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { Id, IsActive, SortOrder } from "./common";
+import { Id, ImageSrc, IsActive, SortOrder } from "./common";
 
 export const HeroSlideEntity = z.object({
   id: Id,
   title: z.string(),
   subtitle: z.string(),
-  imageUrl: z.string().url(),
+  imageUrl: ImageSrc,
   imageAlt: z.string(),
   ctaLabel: z.string(),
   ctaHref: z.string(),
@@ -17,7 +17,7 @@ export type HeroSlideEntityT = z.infer<typeof HeroSlideEntity>;
 export const HeroSlideCreateInput = z.object({
   title: z.string().min(1).max(120),
   subtitle: z.string().max(200).default(""),
-  imageUrl: z.string().url(),
+  imageUrl: ImageSrc,
   imageAlt: z.string().min(1).max(200),
   ctaLabel: z.string().max(60).default("Xem thêm"),
   ctaHref: z.string().max(200).default("#"),

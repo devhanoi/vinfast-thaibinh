@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ImageSrc } from "./common";
 
 export const SeoPageKey = z
   .string()
@@ -19,7 +20,7 @@ export const SeoUpsertInput = z.object({
   pageKey: SeoPageKey,
   title: z.string().min(1).max(70),
   description: z.string().min(1).max(180),
-  ogImageUrl: z.string().url().nullable().optional(),
+  ogImageUrl: ImageSrc.nullable().optional(),
   canonicalPath: z.string().min(1).max(200).default("/"),
 });
 export type SeoUpsertInputT = z.infer<typeof SeoUpsertInput>;

@@ -7,6 +7,18 @@ export const Slug = z
   .max(120)
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "slug phải dạng kebab-case");
 
+/**
+ * URL tuyệt đối (https://...) hoặc đường dẫn tương đối (/images/...).
+ * Dùng cho image src lưu trong DB (vừa có thể là R2/S3 public URL, vừa có thể
+ * là relative path tới `public/`).
+ */
+export const ImageSrc = z
+  .string()
+  .min(1)
+  .refine((v) => v.startsWith("/") || /^https?:\/\//i.test(v), {
+    message: "Phải là URL hoặc đường dẫn bắt đầu bằng /",
+  });
+
 export const PublishStatus = z.enum(["draft", "active", "archived"]);
 export type PublishStatusT = z.infer<typeof PublishStatus>;
 

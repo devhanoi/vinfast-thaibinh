@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { Id, IsActive, PublishStatus, Slug, SortOrder } from "./common";
+import { Id, IsActive, ImageSrc, PublishStatus, Slug, SortOrder } from "./common";
 
 export const ProductCategory = z.enum(["car", "service_car", "bike"]);
 export type ProductCategoryT = z.infer<typeof ProductCategory>;
 
 export const ProductImageEntity = z.object({
   id: Id,
-  url: z.string().url(),
+  url: ImageSrc,
   key: z.string().nullable(),
   alt: z.string(),
   color: z.string().nullable(),
@@ -63,7 +63,7 @@ export const ProductListQuery = z.object({
 export type ProductListQueryT = z.infer<typeof ProductListQuery>;
 
 export const ProductImageCreateInput = z.object({
-  url: z.string().url(),
+  url: ImageSrc,
   key: z.string().nullable().optional(),
   alt: z.string().min(1).max(200),
   color: z.string().max(40).nullable().optional(),
