@@ -51,7 +51,7 @@ export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
   };
 
   return (
-    <div className="relative aspect-[4/5] w-full overflow-hidden md:aspect-[21/9]">
+    <div className="relative h-[55vh] min-h-[320px] w-full overflow-hidden md:h-[60vh] md:max-h-[560px]">
       <div
         className="flex h-full w-full will-change-transform"
         onTransitionEnd={handleTransitionEnd}

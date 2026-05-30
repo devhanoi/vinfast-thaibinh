@@ -1,4 +1,4 @@
-export type StorageProvider = "r2" | "s3";
+export type StorageProvider = "r2" | "s3" | "local";
 
 export type PresignPutInput = {
   key: string;

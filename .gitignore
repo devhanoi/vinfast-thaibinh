@@ -23,6 +23,9 @@ test-results/
 .env
 .env*.local
 
+# User-uploaded files (LocalAdapter). Cloud adapters store on R2/S3.
+/public/uploads/
+
 # misc
 .DS_Store
 *.log

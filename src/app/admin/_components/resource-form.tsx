@@ -4,17 +4,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { z, ZodError } from "zod";
 import { fetchApi } from "@/lib/api/fetcher";
+import { ImageUploader } from "./image-uploader";
 
 export type FieldDef = {
   name: string;
   label: string;
-  type: "text" | "textarea" | "number" | "checkbox" | "select" | "url";
+  type: "text" | "textarea" | "number" | "checkbox" | "select" | "url" | "image";
   required?: boolean;
   placeholder?: string;
   hint?: string;
   options?: { value: string; label: string }[];
   rows?: number;
   defaultValue?: string | number | boolean;
+  uploadResource?: string;
+  uploadSlug?: string;
 };
 
 export function ResourceForm<TInput>({
@@ -117,11 +120,8 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
   const errClass = error ? "border-red-300 focus:border-red-500" : "";
   const defaultStr =
     def.defaultValue === undefined ? undefined : String(def.defaultValue);
-  const wrapClass = ["text", "url", "number", "textarea", "select"].includes(def.type)
-    ? def.type === "textarea"
-      ? "md:col-span-2"
-      : ""
-    : "";
+  const wrapClass =
+    def.type === "textarea" || def.type === "image" ? "md:col-span-2" : "";
 
   return (
     <label className={`block text-sm font-semibold text-ink-soft ${wrapClass}`}>
@@ -160,9 +160,16 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
             </option>
           ))}
         </select>
+      ) : def.type === "image" ? (
+        <ImageUploadField
+          name={def.name}
+          defaultValue={defaultStr}
+          resource={def.uploadResource}
+          slug={def.uploadSlug}
+        />
       ) : (
         <input
-          type={def.type === "number" ? "number" : def.type === "url" ? "text" : "text"}
+          type={def.type === "number" ? "number" : "text"}
           name={def.name}
           required={def.required}
           placeholder={def.placeholder}
@@ -173,5 +180,25 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
 
       {error && <span className="mt-1 block text-xs font-normal text-red-600">{error}</span>}
     </label>
+  );
+}
+
+function ImageUploadField({
+  name,
+  defaultValue,
+  resource,
+  slug,
+}: {
+  name: string;
+  defaultValue?: string;
+  resource?: string;
+  slug?: string;
+}) {
+  const [url, setUrl] = useState(defaultValue ?? "");
+  return (
+    <div className="mt-1.5">
+      <input type="hidden" name={name} value={url} />
+      <ImageUploader value={url} onChange={setUrl} resource={resource} slug={slug} />
+    </div>
   );
 }
