@@ -1,4 +1,9 @@
-export type StorageProvider = "r2" | "s3" | "local";
+/**
+ * Tên provider chỉ là string — adapter có thể tự đăng ký qua registerStorage().
+ * Built-in (loaded mặc định trong storage/index.ts): "local", "r2", "s3",
+ * "backblaze", "supabase". Tự thêm: "gcs", "cloudinary", "uploadthing", v.v.
+ */
+export type StorageProvider = string;
 
 export type PresignPutInput = {
   key: string;

@@ -1,27 +1,28 @@
 import "server-only";
+import { registerStorage, getStorage, listProviders } from "./registry";
+import { createLocalAdapter } from "./local";
 import { createR2Adapter } from "./r2";
 import { createS3Adapter } from "./s3";
-import { createLocalAdapter } from "./local";
-import type { StorageAdapter, StorageProvider } from "./types";
+import { createBackblazeAdapter } from "./backblaze";
+import { createSupabaseAdapter } from "./supabase";
 
-let _adapter: StorageAdapter | null = null;
+// ─── Built-in providers ─────────────────────────────────────────────────────
+// Để switch provider: đổi STORAGE_PROVIDER trong .env. Không cần sửa code.
+//
+// Thêm provider mới (vd. cloudinary, uploadthing, firebase):
+//   1. Tạo src/server/storage/{name}.ts implement StorageAdapter interface
+//   2. registerStorage("{name}", create{Name}Adapter) ở dưới
+//   3. Doc env vars trong docs/STORAGE-PROVIDERS.md
+// ────────────────────────────────────────────────────────────────────────────
+registerStorage("local", createLocalAdapter);
+registerStorage("r2", createR2Adapter);
+registerStorage("s3", createS3Adapter);
+registerStorage("backblaze", createBackblazeAdapter);
+registerStorage("supabase", createSupabaseAdapter);
 
-function pickProvider(): StorageProvider {
-  const raw = (process.env.STORAGE_PROVIDER ?? "local").trim().toLowerCase();
-  if (raw === "r2" || raw === "s3" || raw === "local") return raw;
-  throw new Error(`STORAGE_PROVIDER không hợp lệ: "${raw}" (cho phép: r2 | s3 | local)`);
-}
+// GCS chưa wire vì cần dep nặng @google-cloud/storage. Xem gcs.ts cho hướng dẫn:
+// import { createGcsAdapter } from "./gcs";
+// registerStorage("gcs", createGcsAdapter);
 
-export function getStorage(): StorageAdapter {
-  if (_adapter) return _adapter;
-  const provider = pickProvider();
-  _adapter =
-    provider === "r2"
-      ? createR2Adapter()
-      : provider === "s3"
-        ? createS3Adapter()
-        : createLocalAdapter();
-  return _adapter;
-}
-
+export { getStorage, registerStorage, listProviders };
 export type { StorageAdapter, StorageProvider } from "./types";
