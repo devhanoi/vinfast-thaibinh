@@ -42,12 +42,13 @@ export default function AdminLoginPage() {
           <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
         )}
         <label className="mt-5 block text-sm font-semibold text-ink-soft">
-          Email
+          Email hoặc tên đăng nhập
           <input
             name="email"
-            type="email"
+            type="text"
             required
-            autoComplete="email"
+            autoComplete="username"
+            spellCheck={false}
             className="mt-1.5 w-full rounded-lg border border-paper-line px-3 py-2 text-sm"
           />
         </label>

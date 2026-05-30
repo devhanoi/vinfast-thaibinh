@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { fetchApi } from "@/lib/api/fetcher";
 import {
+  ChargingStationEntity,
   FaqEntity,
   HeroSlideEntity,
   LeadEntity,
@@ -24,14 +25,16 @@ export default function AdminDashboard() {
   const hero = useResourceCount("/api/admin/hero", HeroSlideEntity);
   const faqs = useResourceCount("/api/admin/faqs", FaqEntity);
   const testimonials = useResourceCount("/api/admin/testimonials", TestimonialEntity);
+  const charging = useResourceCount("/api/admin/charging", ChargingStationEntity);
   const leads = useResourceCount("/api/admin/leads", LeadEntity);
 
   const cards = [
-    { label: "Sản phẩm", q: products },
-    { label: "Hero slides", q: hero },
-    { label: "FAQ", q: faqs },
-    { label: "Testimonials", q: testimonials },
-    { label: "Lead", q: leads },
+    { label: "Sản phẩm", q: products, href: "/admin/products" },
+    { label: "Hero slides", q: hero, href: "/admin/hero" },
+    { label: "FAQ", q: faqs, href: "/admin/faqs" },
+    { label: "Testimonials", q: testimonials, href: "/admin/testimonials" },
+    { label: "Trạm sạc", q: charging, href: "/admin/charging" },
+    { label: "Lead", q: leads, href: "/admin/leads" },
   ];
 
   return (
@@ -40,29 +43,20 @@ export default function AdminDashboard() {
       <p className="mt-1 text-sm text-ink-muted">
         Hệ thống CMS VinFast Thái Bình — dữ liệu lấy qua REST API <code>/api/admin/*</code>.
       </p>
-      <div className="mt-6 grid gap-4 md:grid-cols-3 lg:grid-cols-5">
+      <div className="mt-6 grid gap-4 md:grid-cols-3 lg:grid-cols-6">
         {cards.map((c) => (
-          <div
+          <a
             key={c.label}
-            className="rounded-2xl border border-paper-line bg-white p-5 shadow-sm"
+            href={c.href}
+            className="rounded-2xl border border-paper-line bg-white p-5 shadow-sm transition hover:border-brand hover:shadow-md"
           >
             <p className="text-xs uppercase tracking-wider text-ink-muted">{c.label}</p>
             <p className="mt-2 font-display text-3xl font-bold text-brand">
-              {c.q.isLoading ? "…" : c.q.error ? "—" : c.q.data?.length ?? 0}
+              {c.q.isLoading ? "…" : c.q.error ? "—" : (c.q.data?.length ?? 0)}
             </p>
-          </div>
+          </a>
         ))}
       </div>
-
-      <section className="mt-8 rounded-2xl border border-paper-line bg-white p-6">
-        <h2 className="font-display text-lg font-semibold text-ink">CRUD chi tiết</h2>
-        <p className="mt-2 text-sm text-ink-muted">
-          Trang chi tiết quản lý sản phẩm, hero, FAQ, testimonial, trạm sạc, lead, SEO, store
-          sẽ build incrementally. Foundation API đã sẵn sàng tại{" "}
-          <code className="rounded bg-paper-soft px-1.5 py-0.5 text-xs">/api/admin/*</code>{" "}
-          với hooks template ở <code className="rounded bg-paper-soft px-1.5 py-0.5 text-xs">src/lib/api-hooks/</code>.
-        </p>
-      </section>
     </div>
   );
 }
