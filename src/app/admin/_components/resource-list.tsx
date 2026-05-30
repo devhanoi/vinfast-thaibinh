@@ -1,9 +1,11 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { z } from "zod";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { fetchApi } from "@/lib/api/fetcher";
+import { ResourceForm, type FieldDef } from "./resource-form";
 
 export type Column<T> = {
   key: string;
@@ -20,6 +22,7 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
   columns,
   rowKey = (row) => row.id ?? row.pageKey ?? "",
   enableDelete = true,
+  createForm,
 }: {
   title: string;
   description?: string;
@@ -28,9 +31,18 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
   columns: Column<T>[];
   rowKey?: (row: T) => string;
   enableDelete?: boolean;
+  createForm?: {
+    fields: FieldDef[];
+    inputSchema: z.ZodType<unknown>;
+    endpoint?: string;
+    method?: "POST" | "PUT" | "PATCH";
+    submitLabel?: string;
+    triggerLabel?: string;
+  };
 }) {
   const qc = useQueryClient();
   const queryKey = ["admin", endpoint];
+  const [formOpen, setFormOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey,
@@ -49,10 +61,36 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
           <h1 className="font-display text-2xl font-bold text-ink">{title}</h1>
           {description && <p className="mt-1 text-sm text-ink-muted">{description}</p>}
         </div>
-        <p className="text-xs text-ink-muted">
-          {isLoading ? "Đang tải…" : `${data?.length ?? 0} bản ghi`}
-        </p>
+        <div className="flex items-center gap-3">
+          <p className="text-xs text-ink-muted">
+            {isLoading ? "Đang tải…" : `${data?.length ?? 0} bản ghi`}
+          </p>
+          {createForm && (
+            <button
+              type="button"
+              onClick={() => setFormOpen((v) => !v)}
+              className="btn-primary px-4 py-2 text-sm"
+            >
+              {formOpen ? <X size={16} /> : <Plus size={16} />}
+              {formOpen ? "Đóng" : (createForm.triggerLabel ?? "Thêm mới")}
+            </button>
+          )}
+        </div>
       </div>
+
+      {createForm && formOpen && (
+        <div className="mt-6">
+          <ResourceForm
+            fields={createForm.fields}
+            schema={createForm.inputSchema}
+            endpoint={createForm.endpoint ?? endpoint}
+            method={createForm.method ?? "POST"}
+            invalidateKey={queryKey}
+            onDone={() => setFormOpen(false)}
+            submitLabel={createForm.submitLabel ?? "Lưu"}
+          />
+        </div>
+      )}
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-paper-line bg-white">
         {error ? (
@@ -107,11 +145,6 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
           </table>
         )}
       </div>
-
-      <p className="mt-4 text-xs text-ink-muted">
-        Form thêm/sửa chi tiết sẽ build incrementally. Hiện tại có thể tạo qua API trực tiếp:{" "}
-        <code className="rounded bg-paper-soft px-1.5 py-0.5">{endpoint}</code> (POST/PATCH).
-      </p>
     </div>
   );
 }
