@@ -14,7 +14,6 @@ import { TestimonialsSection } from "@/components/sections/testimonials-section"
 import { FaqSection } from "@/components/sections/faq-section";
 import { ContactFooter } from "@/components/sections/contact-footer";
 import { StickyMobileCTA } from "@/components/sections/sticky-mobile-cta";
-import { IntroSection } from "@/components/sections/intro-section";
 import { getHomePageData } from "@/server/cms/data";
 
 export const revalidate = 300;
@@ -26,7 +25,6 @@ export default async function HomePage() {
       <SiteHeader site={data.site} />
       <main className="pb-20 md:pb-0">
         <HeroSection slides={data.heroSlides} />
-        <IntroSection site={data.site} />
         <BenefitsStrip />
         <PriceTable cars={data.cars} site={data.site} />
         <CarGrid cars={data.cars} />
