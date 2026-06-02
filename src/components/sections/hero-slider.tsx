@@ -51,7 +51,7 @@ export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
   };
 
   return (
-    <div className="relative h-[55vh] min-h-[320px] w-full overflow-hidden md:h-[60vh] md:max-h-[560px]">
+    <div className="relative aspect-[21/9] w-full overflow-hidden bg-ink md:max-h-[640px]">
       <div
         className="flex h-full w-full will-change-transform"
         onTransitionEnd={handleTransitionEnd}
@@ -61,14 +61,14 @@ export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
         }}
       >
         {track.map((slide, i) => (
-          <div key={i} className="relative h-full w-full shrink-0 overflow-hidden">
+          <div key={i} className="relative h-full w-full shrink-0 overflow-hidden bg-ink">
             <Image
               src={slide.src}
               alt={slide.alt}
               fill
               sizes="100vw"
               priority={i === 0}
-              className="object-cover"
+              className="object-contain"
             />
           </div>
         ))}
