@@ -8,7 +8,6 @@ import { BikesSection } from "@/components/sections/bikes-section";
 import { FinanceSection } from "@/components/sections/finance-section";
 import { TestDriveForm } from "@/components/sections/test-drive-form";
 import { ChargingMapSection } from "@/components/sections/charging-map-section";
-import { AftersalesSection } from "@/components/sections/aftersales-section";
 import { WhyUsSection } from "@/components/sections/why-us-section";
 import { TestimonialsSection } from "@/components/sections/testimonials-section";
 import { FaqSection } from "@/components/sections/faq-section";
@@ -33,7 +32,6 @@ export default async function HomePage() {
         <FinanceSection />
         <TestDriveForm cars={data.cars} />
         <ChargingMapSection districts={data.chargingStations} totalStations={data.totalStations} />
-        <AftersalesSection />
         <WhyUsSection />
         <TestimonialsSection testimonials={data.testimonials} />
         <FaqSection faqs={data.faqs} />
