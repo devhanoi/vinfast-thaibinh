@@ -84,6 +84,34 @@ export default function AdminProductsPage() {
           },
         ],
       }}
+      editForm={{
+        buildDefaults: (row) => {
+          const p = row as {
+            slug: string;
+            name: string;
+            category: string;
+            status: string;
+            segment: string | null;
+            tagline: string | null;
+            description: string | null;
+            priceFrom: number;
+            battery: string | null;
+            rangeKm: number | null;
+            rangeText: string | null;
+            sortOrder: number;
+            highlights: string[];
+          };
+          return {
+            ...p,
+            segment: p.segment ?? "",
+            tagline: p.tagline ?? "",
+            description: p.description ?? "",
+            battery: p.battery ?? "",
+            rangeText: p.rangeText ?? "",
+            highlights: (p.highlights ?? []).join("\n"),
+          };
+        },
+      }}
       columns={[
         {
           key: "name",
