@@ -1,4 +1,4 @@
-import { handle } from "@/app/api/_lib/handle";
+import { handle, REVALIDATE_CMS } from "@/app/api/_lib/handle";
 import { parseJsonBody } from "@/app/api/_lib/validate";
 import { FaqUpdateInput } from "@/lib/zod";
 import { deleteFaq, getFaq, updateFaq } from "@/server/services/faqs";

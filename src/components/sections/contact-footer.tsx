@@ -22,8 +22,11 @@ export function ContactFooter({ site = SITE }: { site?: SiteSettings }) {
             </li>
             <li className="flex gap-3"><Clock size={18} className="mt-0.5 shrink-0 text-brand" aria-hidden />
               <span>
-                T2–T7: 07:30–18:30
-                <br />Chủ nhật: 08:00–17:00
+                {(site.hours ?? []).map((h, i) => (
+                  <span key={i} className="block">
+                    {formatDays(h.days)}: {h.open}–{h.close}
+                  </span>
+                ))}
               </span>
             </li>
           </ul>
@@ -66,6 +69,23 @@ export function ContactFooter({ site = SITE }: { site?: SiteSettings }) {
       </div>
     </footer>
   );
+}
+
+const DAY_LABEL: Record<string, string> = {
+  Mo: "T2", Tu: "T3", We: "T4", Th: "T5", Fr: "T6", Sa: "T7", Su: "CN",
+};
+
+function formatDays(days: readonly string[]): string {
+  if (!days || days.length === 0) return "—";
+  if (days.length === 1) return DAY_LABEL[days[0]] ?? days[0];
+  // Detect contiguous range (Mo→Sa) and shorten
+  const order = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+  const idx = days.map((d) => order.indexOf(d)).sort((a, b) => a - b);
+  const contiguous = idx.every((v, i) => i === 0 || v === idx[i - 1] + 1);
+  if (contiguous && idx.length >= 3) {
+    return `${DAY_LABEL[order[idx[0]]]}–${DAY_LABEL[order[idx[idx.length - 1]]]}`;
+  }
+  return days.map((d) => DAY_LABEL[d] ?? d).join(", ");
 }
 
 function SocialLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {

@@ -1,4 +1,4 @@
-import { handle } from "@/app/api/_lib/handle";
+import { handle, REVALIDATE_CMS } from "@/app/api/_lib/handle";
 import { deleteSeo, requireSeo } from "@/server/services/seo";
 import { requireAdmin } from "@/server/auth/guard";
 

@@ -1,4 +1,4 @@
-import { handle } from "@/app/api/_lib/handle";
+import { handle, REVALIDATE_CMS } from "@/app/api/_lib/handle";
 import { parseJsonBody } from "@/app/api/_lib/validate";
 import { ProductImageCreateInput } from "@/lib/zod";
 import { attachProductImage } from "@/server/services/products";

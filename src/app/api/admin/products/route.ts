@@ -1,4 +1,4 @@
-import { handle } from "@/app/api/_lib/handle";
+import { handle, REVALIDATE_CMS } from "@/app/api/_lib/handle";
 import { parseJsonBody, parseSearchParams } from "@/app/api/_lib/validate";
 import { ProductCreateInput, ProductListQuery } from "@/lib/zod";
 import { createProduct, listProducts } from "@/server/services/products";

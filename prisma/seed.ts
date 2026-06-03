@@ -41,7 +41,7 @@ const TESTIMONIALS = [
     location: "Huyện Vũ Thư",
     vehicle: "VinFast VF 8 Eco",
     content:
-      "Đại lý 3S đầy đủ dịch vụ, mình bảo dưỡng định kỳ luôn tại đây. Phụ tùng có sẵn, kỹ thuật viên giải thích rõ ràng từng hạng mục.",
+      "Đại lý đầy đủ dịch vụ, mình bảo dưỡng định kỳ luôn tại đây. Phụ tùng có sẵn, kỹ thuật viên giải thích rõ ràng từng hạng mục.",
   },
 ];
 
