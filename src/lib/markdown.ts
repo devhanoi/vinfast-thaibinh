@@ -2,7 +2,9 @@ import { marked } from "marked";
 
 marked.setOptions({
   gfm: true,
-  breaks: true,
+  // breaks:false là chuẩn markdown — \n đơn = space, \n\n (blank line) = paragraph
+  // break. Cần thế để '# heading' + dòng kế tiếp được nhận block đúng.
+  breaks: false,
 });
 
 /**

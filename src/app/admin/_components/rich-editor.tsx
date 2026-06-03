@@ -53,8 +53,9 @@ export function RichEditor({
       Markdown.configure({
         html: false,
         linkify: false,
-        breaks: true,
+        breaks: false,
         transformPastedText: true,
+        transformCopiedText: true,
       }),
     ],
     content: value,
