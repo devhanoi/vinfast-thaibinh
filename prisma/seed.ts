@@ -57,7 +57,9 @@ function titleFromFile(file: string) {
 }
 
 async function seedProducts() {
+  const { PRODUCT_DESCRIPTIONS } = await import("./seed-descriptions");
   for (const [index, car] of CARS.entries()) {
+    const description = PRODUCT_DESCRIPTIONS[car.slug] ?? null;
     const product = await prisma.product.upsert({
       where: { slug: car.slug },
       update: {
@@ -68,6 +70,7 @@ async function seedProducts() {
         battery: car.battery,
         rangeKm: car.rangeKm,
         highlightsJson: car.highlights,
+        description,
         status: "active",
         sortOrder: index + 1,
       },
@@ -80,6 +83,7 @@ async function seedProducts() {
         battery: car.battery,
         rangeKm: car.rangeKm,
         highlightsJson: car.highlights,
+        description,
         status: "active",
         sortOrder: index + 1,
       },
@@ -108,6 +112,7 @@ async function seedProducts() {
   }
 
   for (const [index, item] of SERVICE_CARS.entries()) {
+    const description = PRODUCT_DESCRIPTIONS[item.id] ?? null;
     await prisma.product.upsert({
       where: { slug: item.id },
       update: {
@@ -115,6 +120,7 @@ async function seedProducts() {
         category: "service_car",
         tagline: item.tagline,
         priceFrom: item.priceFrom,
+        description,
         status: "active",
         sortOrder: index + 1,
       },
@@ -125,6 +131,7 @@ async function seedProducts() {
         tagline: item.tagline,
         priceFrom: item.priceFrom,
         highlightsJson: [],
+        description,
         status: "active",
         sortOrder: index + 1,
         images: {

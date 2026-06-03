@@ -31,18 +31,19 @@ function mapImage(row: NonNullable<ProductWithImages>["images"][number]): Produc
 }
 
 function mapProduct(row: NonNullable<ProductWithImages>): ProductEntityT {
+  const r = row as NonNullable<ProductWithImages> & { description?: string | null };
   return {
     id: row.id,
     slug: row.slug,
     name: row.name,
     category: row.category,
-    segment: row.segment,
-    tagline: row.tagline,
-    description: row.description,
+    segment: row.segment ?? null,
+    tagline: row.tagline ?? null,
+    description: r.description ?? null,
     priceFrom: row.priceFrom,
-    battery: row.battery,
-    rangeKm: row.rangeKm,
-    rangeText: row.rangeText,
+    battery: row.battery ?? null,
+    rangeKm: row.rangeKm ?? null,
+    rangeText: row.rangeText ?? null,
     specs: toRecord(row.specsJson),
     highlights: toStringArray(row.highlightsJson),
     status: row.status,
@@ -74,13 +75,12 @@ export async function getProductBySlug(slug: string): Promise<ProductEntityT | n
 export async function createProduct(input: ProductCreateInputT): Promise<ProductEntityT> {
   const data = ProductCreateInput.parse(input);
   try {
-    const row = await productsRepo.create({
+    const createData: Prisma.ProductCreateInput = {
       slug: data.slug,
       name: data.name,
       category: data.category,
       segment: data.segment ?? null,
       tagline: data.tagline ?? null,
-      description: data.description ?? null,
       priceFrom: data.priceFrom,
       battery: data.battery ?? null,
       rangeKm: data.rangeKm ?? null,
@@ -89,7 +89,11 @@ export async function createProduct(input: ProductCreateInputT): Promise<Product
       highlightsJson: data.highlights as Prisma.InputJsonValue,
       status: data.status,
       sortOrder: data.sortOrder ?? 0,
-    });
+    };
+    if (data.description !== undefined) {
+      (createData as unknown as Record<string, unknown>).description = data.description;
+    }
+    const row = await productsRepo.create(createData);
     return mapProduct(row);
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
@@ -108,7 +112,9 @@ export async function updateProduct(id: string, input: ProductUpdateInputT): Pro
   if (data.category !== undefined) update.category = data.category;
   if (data.segment !== undefined) update.segment = data.segment;
   if (data.tagline !== undefined) update.tagline = data.tagline;
-  if (data.description !== undefined) update.description = data.description;
+  if (data.description !== undefined) {
+    (update as unknown as Record<string, unknown>).description = data.description;
+  }
   if (data.priceFrom !== undefined) update.priceFrom = data.priceFrom;
   if (data.battery !== undefined) update.battery = data.battery;
   if (data.rangeKm !== undefined) update.rangeKm = data.rangeKm;

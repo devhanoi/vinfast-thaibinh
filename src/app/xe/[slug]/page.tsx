@@ -12,6 +12,7 @@ import { SpecTable } from "@/components/product/spec-table";
 import { getHomePageData, getProductBySlug } from "@/server/cms/data";
 import { SITE } from "@/lib/site";
 import { formatVND } from "@/lib/utils";
+import { renderMarkdown } from "@/lib/markdown";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -177,13 +178,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <section className="section">
             <div className="container-page max-w-4xl">
               <h2 className="h-section text-ink">Giới thiệu {product.name}</h2>
-              <div className="prose prose-ink mt-6 max-w-none text-base leading-relaxed text-ink-soft">
-                {product.description.split(/\n\n+/).map((para, i) => (
-                  <p key={i} className="mb-4 last:mb-0 whitespace-pre-line">
-                    {para}
-                  </p>
-                ))}
-              </div>
+              <div
+                className="md-content mt-6 text-base leading-relaxed text-ink-soft"
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(product.description) }}
+              />
             </div>
           </section>
         )}

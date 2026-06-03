@@ -82,6 +82,7 @@ model Product {
   category       ProductCategory @default(car)
   segment        String?
   tagline        String?
+  description    String?
   priceFrom      Int             @map("price_from")
   battery        String?
   rangeKm        Int?            @map("range_km")
