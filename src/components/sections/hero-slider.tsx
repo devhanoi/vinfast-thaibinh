@@ -17,7 +17,7 @@ const FALLBACK_SLIDES: Slide[] = [
 ];
 
 const AUTOPLAY_MS = 5000;
-const TRANSITION_MS = 800;
+const FADE_MS = 800;
 
 export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
   const slides: Slide[] =
@@ -25,71 +25,53 @@ export function HeroSlider({ slides: cmsSlides }: { slides?: CmsHeroSlide[] }) {
       ? cmsSlides.map((s) => ({ src: s.imageUrl, alt: s.imageAlt || s.title }))
       : FALLBACK_SLIDES;
 
-  const [index, setIndex] = useState(0);
-  const [transitionOn, setTransitionOn] = useState(true);
-  const track = [...slides, slides[0]];
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
     if (slides.length <= 1) return;
     const id = setInterval(() => {
-      setTransitionOn(true);
-      setIndex((i) => i + 1);
+      setActive((i) => (i + 1) % slides.length);
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
   }, [slides.length]);
 
-  const handleTransitionEnd = () => {
-    if (index !== slides.length) return;
-    setTransitionOn(false);
-    setIndex(0);
-    requestAnimationFrame(() => requestAnimationFrame(() => setTransitionOn(true)));
-  };
-
-  const goTo = (i: number) => {
-    setTransitionOn(true);
-    setIndex(i);
-  };
-
   return (
-    <div className="relative w-full overflow-hidden bg-ink">
-      <div
-        className="flex w-full will-change-transform"
-        onTransitionEnd={handleTransitionEnd}
-        style={{
-          transform: `translate3d(-${index * 100}%, 0, 0)`,
-          transition: transitionOn ? `transform ${TRANSITION_MS}ms ease-in-out` : "none",
-        }}
-      >
-        {track.map((slide, i) => (
-          <div key={i} className="w-full shrink-0">
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              width={1920}
-              height={823}
-              sizes="100vw"
-              priority={i === 0}
-              className="block h-auto w-full"
-            />
-          </div>
-        ))}
-      </div>
+    <div className="relative aspect-[21/9] w-full overflow-hidden bg-ink">
+      {slides.map((slide, i) => (
+        <div
+          key={i}
+          aria-hidden={i !== active}
+          className="absolute inset-0"
+          style={{
+            opacity: i === active ? 1 : 0,
+            transition: `opacity ${FADE_MS}ms ease-in-out`,
+            pointerEvents: i === active ? "auto" : "none",
+          }}
+        >
+          <Image
+            src={slide.src}
+            alt={slide.alt}
+            fill
+            sizes="100vw"
+            priority={i === 0}
+            className="object-contain"
+          />
+        </div>
+      ))}
+
       {slides.length > 1 && (
         <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-6">
-          {slides.map((_, i) => {
-            const active = index % slides.length === i;
-            return (
-              <button
-                key={i}
-                type="button"
-                aria-label={`Chuyển tới slide ${i + 1}`}
-                onClick={() => goTo(i)}
-                className={`h-1.5 rounded-full transition-all ${
-                  active ? "w-8 bg-brand" : "w-4 bg-white/40 hover:bg-white/70"
-                }`}
-              />
-            );
-          })}
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Chuyển tới slide ${i + 1}`}
+              onClick={() => setActive(i)}
+              className={`h-1.5 rounded-full transition-all ${
+                i === active ? "w-8 bg-brand" : "w-4 bg-white/40 hover:bg-white/70"
+              }`}
+            />
+          ))}
         </div>
       )}
     </div>
