@@ -9,10 +9,10 @@ import { ContactFooter } from "@/components/sections/contact-footer";
 import { TestDriveForm } from "@/components/sections/test-drive-form";
 import { ProductGallery } from "@/components/product/gallery";
 import { SpecTable } from "@/components/product/spec-table";
+import { Streamdown } from "streamdown";
 import { getHomePageData, getProductBySlug } from "@/server/cms/data";
 import { SITE } from "@/lib/site";
 import { formatVND } from "@/lib/utils";
-import { renderMarkdown } from "@/lib/markdown";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -178,10 +178,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <section className="section">
             <div className="container-page max-w-4xl">
               <h2 className="h-section text-ink">Giới thiệu {product.name}</h2>
-              <div
-                className="md-content mt-6 text-base leading-relaxed text-ink-soft"
-                dangerouslySetInnerHTML={{ __html: renderMarkdown(product.description) }}
-              />
+              <div className="streamdown-content mt-6 text-base leading-relaxed text-ink-soft">
+                <Streamdown>{product.description}</Streamdown>
+              </div>
             </div>
           </section>
         )}

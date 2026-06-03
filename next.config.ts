@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   compress: true,
   // markdown-it bị bundle lệch khi import gián tiếp qua tiptap-markdown ->
   // ReferenceError: isSpace is not defined. Force Next transpile để fix.
-  transpilePackages: ["tiptap-markdown", "markdown-it", "marked"],
+  transpilePackages: ["tiptap-markdown", "markdown-it", "marked", "streamdown"],
   images: {
     formats: ["image/avif", "image/webp"],
     dangerouslyAllowSVG: true,
