@@ -3,15 +3,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
-import { Plus, Trash2, X } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { fetchApi } from "@/lib/api/fetcher";
 import { ResourceForm, type FieldDef } from "./resource-form";
+import { Modal } from "./modal";
 
 export type Column<T> = {
   key: string;
   label: string;
   cell: (row: T) => React.ReactNode;
   className?: string;
+};
+
+type EditFormConfig = {
+  fields?: FieldDef[];
+  inputSchema?: z.ZodType<unknown>;
+  method?: "POST" | "PUT" | "PATCH";
+  readonlyKeys?: string[];
+  buildEndpoint?: (row: { id?: string; pageKey?: string }, baseEndpoint: string) => string;
+  buildDefaults?: (row: unknown) => Record<string, unknown>;
 };
 
 export function ResourceList<T extends { id?: string; pageKey?: string }>({
@@ -23,6 +33,7 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
   rowKey = (row) => row.id ?? row.pageKey ?? "",
   enableDelete = true,
   createForm,
+  editForm,
 }: {
   title: string;
   description?: string;
@@ -39,10 +50,13 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
     submitLabel?: string;
     triggerLabel?: string;
   };
+  editForm?: EditFormConfig;
 }) {
   const qc = useQueryClient();
   const queryKey = ["admin", endpoint];
-  const [formOpen, setFormOpen] = useState(false);
+
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editingRow, setEditingRow] = useState<T | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey,
@@ -53,6 +67,22 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
     mutationFn: (id: string) => fetchApi(`${endpoint}/${id}`, { method: "DELETE" }),
     onSuccess: () => qc.invalidateQueries({ queryKey }),
   });
+
+  const enableEdit = Boolean(editForm && createForm);
+  const editFields = editForm?.fields ?? createForm?.fields ?? [];
+  const editSchema = editForm?.inputSchema ?? createForm?.inputSchema;
+  const editEndpoint = editingRow
+    ? editForm?.buildEndpoint
+      ? editForm.buildEndpoint(editingRow, endpoint)
+      : `${endpoint}/${rowKey(editingRow)}`
+    : endpoint;
+  const editDefaults = editingRow
+    ? editForm?.buildDefaults
+      ? editForm.buildDefaults(editingRow)
+      : (editingRow as unknown as Record<string, unknown>)
+    : undefined;
+
+  const showActionsCol = enableDelete || enableEdit;
 
   return (
     <div>
@@ -68,29 +98,14 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
           {createForm && (
             <button
               type="button"
-              onClick={() => setFormOpen((v) => !v)}
+              onClick={() => setCreateOpen(true)}
               className="btn-primary px-4 py-2 text-sm"
             >
-              {formOpen ? <X size={16} /> : <Plus size={16} />}
-              {formOpen ? "Đóng" : (createForm.triggerLabel ?? "Thêm mới")}
+              <Plus size={16} /> {createForm.triggerLabel ?? "Thêm mới"}
             </button>
           )}
         </div>
       </div>
-
-      {createForm && formOpen && (
-        <div className="mt-6">
-          <ResourceForm
-            fields={createForm.fields}
-            schema={createForm.inputSchema}
-            endpoint={createForm.endpoint ?? endpoint}
-            method={createForm.method ?? "POST"}
-            invalidateKey={queryKey}
-            onDone={() => setFormOpen(false)}
-            submitLabel={createForm.submitLabel ?? "Lưu"}
-          />
-        </div>
-      )}
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-paper-line bg-white">
         {error ? (
@@ -110,7 +125,7 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
                     {c.label}
                   </th>
                 ))}
-                {enableDelete && <th className="px-4 py-3 text-right">Hành động</th>}
+                {showActionsCol && <th className="px-4 py-3 text-right">Hành động</th>}
               </tr>
             </thead>
             <tbody>
@@ -123,19 +138,33 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
                         {c.cell(row)}
                       </td>
                     ))}
-                    {enableDelete && (
+                    {showActionsCol && (
                       <td className="px-4 py-3 text-right">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (confirm(`Xóa "${id}"?`)) del.mutate(id);
-                          }}
-                          disabled={del.isPending}
-                          className="inline-flex items-center gap-1 rounded-md border border-paper-line px-2 py-1 text-xs text-red-600 hover:border-red-300 hover:bg-red-50 disabled:opacity-40"
-                          aria-label="Xóa"
-                        >
-                          <Trash2 size={14} /> Xóa
-                        </button>
+                        <div className="inline-flex items-center gap-1.5">
+                          {enableEdit && (
+                            <button
+                              type="button"
+                              onClick={() => setEditingRow(row)}
+                              className="inline-flex items-center gap-1 rounded-md border border-paper-line px-2 py-1 text-xs text-ink hover:border-brand hover:bg-brand/5"
+                              aria-label="Sửa"
+                            >
+                              <Pencil size={14} /> Sửa
+                            </button>
+                          )}
+                          {enableDelete && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (confirm(`Xóa "${id}"?`)) del.mutate(id);
+                              }}
+                              disabled={del.isPending}
+                              className="inline-flex items-center gap-1 rounded-md border border-paper-line px-2 py-1 text-xs text-red-600 hover:border-red-300 hover:bg-red-50 disabled:opacity-40"
+                              aria-label="Xóa"
+                            >
+                              <Trash2 size={14} /> Xóa
+                            </button>
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>
@@ -145,6 +174,54 @@ export function ResourceList<T extends { id?: string; pageKey?: string }>({
           </table>
         )}
       </div>
+
+      {/* Create modal */}
+      {createForm && (
+        <Modal
+          open={createOpen}
+          onClose={() => setCreateOpen(false)}
+          title={createForm.triggerLabel ?? "Thêm mới"}
+          subtitle="Điền thông tin và bấm Lưu."
+          size="lg"
+        >
+          <ResourceForm
+            key="create"
+            fields={createForm.fields}
+            schema={createForm.inputSchema}
+            endpoint={createForm.endpoint ?? endpoint}
+            method={createForm.method ?? "POST"}
+            invalidateKey={queryKey}
+            onDone={() => setCreateOpen(false)}
+            submitLabel={createForm.submitLabel ?? "Lưu"}
+          />
+        </Modal>
+      )}
+
+      {/* Edit modal */}
+      {enableEdit && editSchema && (
+        <Modal
+          open={Boolean(editingRow)}
+          onClose={() => setEditingRow(null)}
+          title="Chỉnh sửa"
+          subtitle={editingRow ? `Đang sửa: ${rowKey(editingRow)}` : undefined}
+          size="lg"
+        >
+          {editingRow && (
+            <ResourceForm
+              key={`edit-${rowKey(editingRow)}`}
+              fields={editFields}
+              schema={editSchema}
+              endpoint={editEndpoint}
+              method={editForm?.method ?? "PATCH"}
+              invalidateKey={queryKey}
+              defaults={editDefaults}
+              readonlyKeys={editForm?.readonlyKeys}
+              onDone={() => setEditingRow(null)}
+              submitLabel="Cập nhật"
+            />
+          )}
+        </Modal>
+      )}
     </div>
   );
 }

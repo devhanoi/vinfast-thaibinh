@@ -36,6 +36,8 @@ export function ResourceForm<TInput>({
   invalidateKey,
   onDone,
   submitLabel = "Lưu",
+  defaults,
+  readonlyKeys,
 }: {
   fields: FieldDef[];
   schema: z.ZodType<TInput>;
@@ -44,6 +46,10 @@ export function ResourceForm<TInput>({
   invalidateKey: readonly unknown[];
   onDone?: () => void;
   submitLabel?: string;
+  /** Pre-fill field values khi edit existing row. Override FieldDef.defaultValue. */
+  defaults?: Record<string, unknown>;
+  /** Field keys không cho sửa khi edit (vd pageKey identifier). */
+  readonlyKeys?: string[];
 }) {
   const qc = useQueryClient();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -102,9 +108,15 @@ export function ResourceForm<TInput>({
         <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{serverError}</div>
       )}
       <div className="grid gap-4 md:grid-cols-2">
-        {fields.map((f) => (
-          <Field key={f.name} def={f} error={errors[f.name]} />
-        ))}
+        {fields.map((f) => {
+          const override = defaults?.[f.name];
+          const merged: FieldDef =
+            override !== undefined && override !== null
+              ? { ...f, defaultValue: override as string | number | boolean }
+              : f;
+          const readOnly = readonlyKeys?.includes(f.name) ?? false;
+          return <Field key={f.name} def={merged} error={errors[f.name]} readOnly={readOnly} />;
+        })}
       </div>
       <div className="flex items-center gap-3">
         <button
@@ -128,10 +140,19 @@ export function ResourceForm<TInput>({
   );
 }
 
-function Field({ def, error }: { def: FieldDef; error?: string }) {
+function Field({
+  def,
+  error,
+  readOnly = false,
+}: {
+  def: FieldDef;
+  error?: string;
+  readOnly?: boolean;
+}) {
   const inputClass =
     "mt-1.5 w-full rounded-lg border border-paper-line bg-white px-3 py-2 text-sm focus:border-ink focus:outline-none";
   const errClass = error ? "border-red-300 focus:border-red-500" : "";
+  const roClass = readOnly ? "bg-paper-soft text-ink-muted cursor-not-allowed" : "";
   const defaultStr =
     def.defaultValue === undefined ? undefined : String(def.defaultValue);
   const wrapClass =
@@ -153,14 +174,16 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
           required={def.required}
           placeholder={def.placeholder}
           defaultValue={defaultStr}
+          readOnly={readOnly}
           rows={def.rows ?? (def.type === "stringArray" ? 4 : 3)}
-          className={`${inputClass} ${errClass}`}
+          className={`${inputClass} ${errClass} ${roClass}`}
         />
       ) : def.type === "checkbox" ? (
         <input
           type="checkbox"
           name={def.name}
           defaultChecked={Boolean(def.defaultValue)}
+          disabled={readOnly}
           className="mt-2 h-4 w-4 rounded border-paper-line accent-brand"
         />
       ) : def.type === "select" ? (
@@ -168,7 +191,8 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
           name={def.name}
           required={def.required}
           defaultValue={defaultStr}
-          className={`${inputClass} ${errClass}`}
+          disabled={readOnly}
+          className={`${inputClass} ${errClass} ${roClass}`}
         >
           {def.options?.map((o) => (
             <option key={o.value} value={o.value}>
@@ -190,7 +214,8 @@ function Field({ def, error }: { def: FieldDef; error?: string }) {
           required={def.required}
           placeholder={def.placeholder}
           defaultValue={defaultStr}
-          className={`${inputClass} ${errClass}`}
+          readOnly={readOnly}
+          className={`${inputClass} ${errClass} ${roClass}`}
         />
       )}
 

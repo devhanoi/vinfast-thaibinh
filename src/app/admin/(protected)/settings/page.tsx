@@ -31,7 +31,7 @@ export default function AdminSettingsPage() {
       <section>
         <ResourceList<SeoEntityT>
           title="SEO settings"
-          description="Title, meta description, canonical, OG image — config theo từng pageKey (home, xe-vf3, bang-gia…)."
+          description="Title, meta description, canonical, OG image — config theo từng pageKey. Click 'Sửa' để cập nhật row có sẵn, hoặc 'Thêm SEO mới' cho pageKey mới."
           endpoint="/api/admin/seo"
           schema={SeoEntity}
           enableDelete={false}
@@ -39,15 +39,20 @@ export default function AdminSettingsPage() {
           createForm={{
             inputSchema: SeoUpsertInput,
             method: "PUT",
-            triggerLabel: "Thêm / cập nhật",
-            submitLabel: "Lưu (upsert)",
+            triggerLabel: "Thêm SEO mới",
+            submitLabel: "Tạo",
             fields: [
-              { name: "pageKey", label: "Page key", type: "text", required: true, placeholder: "home, xe-vf3, bang-gia..." },
+              { name: "pageKey", label: "Page key", type: "text", required: true, placeholder: "home, xe-vf3, bang-gia...", hint: "kebab/snake case, dùng định danh page" },
               { name: "title", label: "Title (≤70)", type: "text", required: true },
               { name: "description", label: "Meta description (≤160)", type: "textarea", required: true, rows: 3 },
               { name: "ogImageUrl", label: "OG image URL", type: "url", placeholder: "/images/og-cover.jpg" },
               { name: "canonicalPath", label: "Canonical path", type: "text", defaultValue: "/" },
             ],
+          }}
+          editForm={{
+            method: "PUT",
+            readonlyKeys: ["pageKey"],
+            buildEndpoint: (_row, base) => base,
           }}
           columns={[
             { key: "pageKey", label: "Page", cell: (s) => <code className="text-xs">{s.pageKey}</code> },
