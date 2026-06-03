@@ -60,6 +60,13 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
   verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION ?? undefined },
+  icons: {
+    icon: [
+      { url: "/images/Vinfast-logo.png", type: "image/png" },
+    ],
+    shortcut: "/images/Vinfast-logo.png",
+    apple: "/images/Vinfast-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
