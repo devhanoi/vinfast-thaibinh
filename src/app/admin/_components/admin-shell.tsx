@@ -12,8 +12,7 @@ const NAV = [
   { href: "/admin/testimonials", label: "Testimonials" },
   { href: "/admin/charging", label: "Trạm sạc" },
   { href: "/admin/leads", label: "Leads" },
-  { href: "/admin/seo", label: "SEO" },
-  { href: "/admin/store", label: "Thông tin showroom" },
+  { href: "/admin/settings", label: "Cài đặt + SEO" },
 ];
 
 export function AdminShell({
