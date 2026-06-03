@@ -4,6 +4,7 @@ import { ArrowRight, BatteryCharging, Check, Route } from "lucide-react";
 import { CARS } from "@/content/cars";
 import { formatVND } from "@/lib/utils";
 import type { CmsProduct } from "@/server/cms/types";
+import { extractCarColors, type CarColor } from "@/lib/car-colors";
 
 export function CarGrid({ cars }: { cars?: CmsProduct[] }) {
   const items: CmsProduct[] =
@@ -61,6 +62,7 @@ export function CarGrid({ cars }: { cars?: CmsProduct[] }) {
 function CarCard({ car }: { car: CmsProduct }) {
   const rangeText = car.rangeKm ? `${car.rangeKm} km` : (car.rangeText ?? "—");
   const highlights = (car.highlights ?? []).slice(0, 3);
+  const colors = extractCarColors(car.images ?? []);
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-paper-line bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-xl">
@@ -90,6 +92,8 @@ function CarCard({ car }: { car: CmsProduct }) {
             <SpecChip icon={<Route size={12} aria-hidden />} label={rangeText} />
           )}
         </div>
+
+        {colors.length > 0 && <ColorSwatches colors={colors} />}
 
         {highlights.length > 0 && (
           <ul className="mt-4 space-y-1.5 text-sm text-ink-soft">
@@ -130,5 +134,34 @@ function SpecChip({ icon, label }: { icon: React.ReactNode; label: string }) {
       {icon}
       {label}
     </span>
+  );
+}
+
+function ColorSwatches({ colors }: { colors: CarColor[] }) {
+  const MAX = 6;
+  const visible = colors.slice(0, MAX);
+  const overflow = colors.length - visible.length;
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+        {colors.length} màu
+      </span>
+      <div className="flex items-center gap-1">
+        {visible.map((c) => (
+          <span
+            key={c.slug}
+            title={c.label}
+            aria-label={c.label}
+            className={`h-4 w-4 rounded-full shadow-sm transition ${
+              c.isLight ? "ring-1 ring-paper-line" : "ring-1 ring-white/30"
+            }`}
+            style={{ background: c.gradient ?? c.hex }}
+          />
+        ))}
+        {overflow > 0 && (
+          <span className="ml-0.5 text-[11px] font-medium text-ink-muted">+{overflow}</span>
+        )}
+      </div>
+    </div>
   );
 }
