@@ -5,6 +5,7 @@ import { useState } from "react";
 import { z, ZodError } from "zod";
 import { fetchApi } from "@/lib/api/fetcher";
 import { ImageUploader } from "./image-uploader";
+import { RichEditor } from "./rich-editor";
 
 export type FieldDef = {
   name: string;
@@ -17,7 +18,8 @@ export type FieldDef = {
     | "select"
     | "url"
     | "image"
-    | "stringArray";
+    | "stringArray"
+    | "richText";
   required?: boolean;
   placeholder?: string;
   hint?: string;
@@ -156,7 +158,10 @@ function Field({
   const defaultStr =
     def.defaultValue === undefined ? undefined : String(def.defaultValue);
   const wrapClass =
-    def.type === "textarea" || def.type === "image" || def.type === "stringArray"
+    def.type === "textarea" ||
+    def.type === "image" ||
+    def.type === "stringArray" ||
+    def.type === "richText"
       ? "md:col-span-2"
       : "";
 
@@ -207,6 +212,8 @@ function Field({
           resource={def.uploadResource}
           slug={def.uploadSlug}
         />
+      ) : def.type === "richText" ? (
+        <RichTextField name={def.name} defaultValue={defaultStr} placeholder={def.placeholder} />
       ) : (
         <input
           type={def.type === "number" ? "number" : "text"}
@@ -240,6 +247,24 @@ function ImageUploadField({
     <div className="mt-1.5">
       <input type="hidden" name={name} value={url} />
       <ImageUploader value={url} onChange={setUrl} resource={resource} slug={slug} />
+    </div>
+  );
+}
+
+function RichTextField({
+  name,
+  defaultValue,
+  placeholder,
+}: {
+  name: string;
+  defaultValue?: string;
+  placeholder?: string;
+}) {
+  const [value, setValue] = useState(defaultValue ?? "");
+  return (
+    <div className="mt-1.5">
+      <input type="hidden" name={name} value={value} />
+      <RichEditor value={value} onChange={setValue} placeholder={placeholder} />
     </div>
   );
 }

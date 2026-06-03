@@ -17,6 +17,7 @@ import {
 } from "@/lib/zod";
 import { useProduct, useUpdateProduct } from "@/lib/api-hooks/use-products";
 import { ImageUploader } from "../../../_components/image-uploader";
+import { RichEditor } from "../../../_components/rich-editor";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -147,16 +148,7 @@ function ProductInfoForm({ product }: { product: ProductEntityT }) {
           defaultValue={String(product.sortOrder)}
         />
       </div>
-      <label className="mt-4 block text-sm font-semibold text-ink-soft">
-        Mô tả sản phẩm (văn phong dài, ≤5000 ký tự)
-        <textarea
-          name="description"
-          rows={6}
-          defaultValue={product.description ?? ""}
-          placeholder="VF 8 là mẫu D-SUV 5 chỗ cao cấp của VinFast..."
-          className="mt-1.5 w-full rounded-lg border border-paper-line px-3 py-2 text-sm"
-        />
-      </label>
+      <DescriptionField defaultValue={product.description ?? ""} />
       <label className="mt-4 block text-sm font-semibold text-ink-soft">
         Highlights (mỗi dòng 1 ý)
         <textarea
@@ -446,6 +438,26 @@ function FormField({
         className="mt-1.5 w-full rounded-lg border border-paper-line px-3 py-2 text-sm focus:border-ink focus:outline-none"
       />
     </label>
+  );
+}
+
+function DescriptionField({ defaultValue }: { defaultValue: string }) {
+  const [value, setValue] = useState(defaultValue);
+  return (
+    <div className="mt-4">
+      <p className="block text-sm font-semibold text-ink-soft">Mô tả sản phẩm (rich text)</p>
+      <p className="mt-0.5 text-xs font-normal text-ink-muted">
+        Toolbar bold/italic/heading/list/link/quote. Lưu dạng markdown, render trên /xe/{`{slug}`}.
+      </p>
+      <input type="hidden" name="description" value={value} />
+      <div className="mt-1.5">
+        <RichEditor
+          value={value}
+          onChange={setValue}
+          placeholder="VinFast VF 8 là mẫu D-SUV 5 chỗ cao cấp..."
+        />
+      </div>
+    </div>
   );
 }
 
