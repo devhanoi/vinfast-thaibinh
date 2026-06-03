@@ -27,6 +27,7 @@ export default function AdminTestimonialsPage() {
           { name: "isActive", label: "Hiển thị", type: "checkbox", defaultValue: true },
         ],
       }}
+      editForm={{}}
       columns={[
         { key: "name", label: "Khách hàng", cell: (t) => <span className="font-semibold text-ink">{t.name}</span> },
         { key: "content", label: "Nội dung", cell: (t) => <span className="line-clamp-2 text-ink-muted">{t.content}</span> },

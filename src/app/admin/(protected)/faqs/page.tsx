@@ -20,6 +20,7 @@ export default function AdminFaqsPage() {
           { name: "isActive", label: "Hiển thị", type: "checkbox", defaultValue: true },
         ],
       }}
+      editForm={{}}
       columns={[
         { key: "question", label: "Câu hỏi", cell: (f) => <span className="font-semibold text-ink">{f.question}</span> },
         { key: "answer", label: "Trả lời", cell: (f) => <span className="line-clamp-2 text-ink-muted">{f.answer}</span> },

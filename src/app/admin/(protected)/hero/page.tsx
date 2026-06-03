@@ -33,6 +33,7 @@ export default function AdminHeroPage() {
           { name: "isActive", label: "Active", type: "checkbox", defaultValue: true },
         ],
       }}
+      editForm={{}}
       columns={[
         {
           key: "preview",

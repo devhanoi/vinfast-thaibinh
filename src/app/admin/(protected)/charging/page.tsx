@@ -28,6 +28,7 @@ export default function AdminChargingPage() {
           { name: "isActive", label: "Active", type: "checkbox", defaultValue: true },
         ],
       }}
+      editForm={{}}
       columns={[
         { key: "name", label: "Tên trạm", cell: (s) => <span className="font-semibold text-ink">{s.name}</span> },
         { key: "district", label: "Huyện", cell: (s) => s.district },
