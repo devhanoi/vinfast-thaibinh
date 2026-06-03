@@ -173,6 +173,21 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </aside>
         </section>
 
+        {product.description && (
+          <section className="section">
+            <div className="container-page max-w-4xl">
+              <h2 className="h-section text-ink">Giới thiệu {product.name}</h2>
+              <div className="prose prose-ink mt-6 max-w-none text-base leading-relaxed text-ink-soft">
+                {product.description.split(/\n\n+/).map((para, i) => (
+                  <p key={i} className="mb-4 last:mb-0 whitespace-pre-line">
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="bg-paper-soft section">
           <div className="container-page max-w-4xl">
             <h2 className="h-section text-ink">Thông số kỹ thuật</h2>

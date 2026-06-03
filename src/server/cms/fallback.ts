@@ -29,6 +29,7 @@ function fallbackProduct(
     category,
     segment: item.segment ?? null,
     tagline: item.tagline ?? null,
+    description: null,
     priceFrom: item.priceFrom,
     battery: item.battery ?? null,
     rangeKm: item.rangeKm ?? null,

@@ -9,6 +9,7 @@ export type CmsProduct = {
   category: "car" | "service_car" | "bike";
   segment: string | null;
   tagline: string | null;
+  description: string | null;
   priceFrom: number;
   battery: string | null;
   rangeKm: number | null;

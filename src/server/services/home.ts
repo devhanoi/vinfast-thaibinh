@@ -39,6 +39,7 @@ function toCmsProduct(p: ProductEntityT): CmsProduct {
     category: p.category,
     segment: p.segment,
     tagline: p.tagline,
+    description: p.description,
     priceFrom: p.priceFrom,
     battery: p.battery,
     rangeKm: p.rangeKm,

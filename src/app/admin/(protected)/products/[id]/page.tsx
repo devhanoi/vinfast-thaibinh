@@ -67,6 +67,7 @@ function ProductInfoForm({ product }: { product: ProductEntityT }) {
       category: fd.get("category") as ProductCategoryT,
       segment: stringOrNull(fd.get("segment")),
       tagline: stringOrNull(fd.get("tagline")),
+      description: stringOrNull(fd.get("description")),
       priceFrom: Number(fd.get("priceFrom") ?? 0),
       battery: stringOrNull(fd.get("battery")),
       rangeKm: fd.get("rangeKm") ? Number(fd.get("rangeKm")) : null,
@@ -146,6 +147,16 @@ function ProductInfoForm({ product }: { product: ProductEntityT }) {
           defaultValue={String(product.sortOrder)}
         />
       </div>
+      <label className="mt-4 block text-sm font-semibold text-ink-soft">
+        Mô tả sản phẩm (văn phong dài, ≤5000 ký tự)
+        <textarea
+          name="description"
+          rows={6}
+          defaultValue={product.description ?? ""}
+          placeholder="VF 8 là mẫu D-SUV 5 chỗ cao cấp của VinFast..."
+          className="mt-1.5 w-full rounded-lg border border-paper-line px-3 py-2 text-sm"
+        />
+      </label>
       <label className="mt-4 block text-sm font-semibold text-ink-soft">
         Highlights (mỗi dòng 1 ý)
         <textarea

@@ -38,6 +38,7 @@ function mapProduct(row: NonNullable<ProductWithImages>): ProductEntityT {
     category: row.category,
     segment: row.segment,
     tagline: row.tagline,
+    description: row.description,
     priceFrom: row.priceFrom,
     battery: row.battery,
     rangeKm: row.rangeKm,
@@ -79,6 +80,7 @@ export async function createProduct(input: ProductCreateInputT): Promise<Product
       category: data.category,
       segment: data.segment ?? null,
       tagline: data.tagline ?? null,
+      description: data.description ?? null,
       priceFrom: data.priceFrom,
       battery: data.battery ?? null,
       rangeKm: data.rangeKm ?? null,
@@ -106,6 +108,7 @@ export async function updateProduct(id: string, input: ProductUpdateInputT): Pro
   if (data.category !== undefined) update.category = data.category;
   if (data.segment !== undefined) update.segment = data.segment;
   if (data.tagline !== undefined) update.tagline = data.tagline;
+  if (data.description !== undefined) update.description = data.description;
   if (data.priceFrom !== undefined) update.priceFrom = data.priceFrom;
   if (data.battery !== undefined) update.battery = data.battery;
   if (data.rangeKm !== undefined) update.rangeKm = data.rangeKm;

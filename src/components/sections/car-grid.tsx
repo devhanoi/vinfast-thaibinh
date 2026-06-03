@@ -14,6 +14,7 @@ export function CarGrid({ cars }: { cars?: CmsProduct[] }) {
       category: "car",
       segment: car.segment ?? null,
       tagline: null,
+      description: null,
       battery: car.battery ?? null,
       rangeKm: car.rangeKm ?? null,
       rangeText: null,
